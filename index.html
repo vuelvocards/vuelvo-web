@@ -1,0 +1,4600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vuelvo — Clientes que regresan, siempre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#080808;
+  --surface:#0f0f0f;
+  --surface2:#161616;
+  --border:rgba(255,255,255,0.07);
+  --border-bright:rgba(255,255,255,0.12);
+  --lime:#d4f76b;
+  --lime-dim:rgba(212,247,107,0.12);
+  --lime-glow:rgba(212,247,107,0.25);
+  --white:#ffffff;
+  --off-white:#e8e8e8;
+  --muted:rgba(255,255,255,0.4);
+  --muted2:rgba(255,255,255,0.22);
+  --navy:#0d1a3a;
+  --navy-light:#1a2a5e;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--black);
+  color:var(--white);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.6;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5vw;height:64px;
+  background:rgba(8,8,8,0.7);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  transition:background .3s, border-color .3s;
+}
+nav.scrolled{
+  background:rgba(8,8,8,0.92);
+  border-bottom:1px solid var(--border-bright);
+}
+.nav-logo img{height:32px;width:auto;display:block;transition:opacity .2s;mix-blend-mode:screen;filter:brightness(1.1);}
+.nav-logo:hover img{opacity:.75}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;
+  font-size:.82rem;font-weight:500;letter-spacing:.01em;
+  transition:color .2s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;
+  background:var(--lime);transform:scaleX(0);transform-origin:left;
+  transition:transform .25s ease;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.btn-nav-cta{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--lime);color:#080808!important;
+  padding:.55rem 1.3rem;border-radius:8px;
+  font-size:.82rem;font-weight:800!important;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+}
+.btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,247,107,.28)}
+.btn-nav-cta::after{display:none!important}
+
+/* HERO */
+.hero{
+  position:relative;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:3rem;
+  padding:7rem 5vw 5rem;overflow:hidden;z-index:1;
+}
+.hero-glow{
+  position:absolute;top:-20%;left:-10%;
+  width:70vw;height:70vw;
+  background:radial-gradient(ellipse at 30% 40%, rgba(212,247,107,.07) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-glow-2{
+  position:absolute;bottom:-20%;right:0;
+  width:50vw;height:50vw;
+  background:radial-gradient(ellipse, rgba(212,247,107,.04) 0%, transparent 65%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  pointer-events:none;
+}
+
+/* HERO LEFT */
+.hero-left{position:relative;z-index:2}
+.hero-left > *{opacity:0;transform:translateY(20px);animation:fadeUp .7s ease forwards}
+.hero-left > *:nth-child(1){animation-delay:.1s}
+.hero-left > *:nth-child(2){animation-delay:.22s}
+.hero-left > *:nth-child(3){animation-delay:.34s}
+.hero-left > *:nth-child(4){animation-delay:.46s}
+.hero-left > *:nth-child(5){animation-delay:.58s}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.2);
+  color:var(--lime);font-size:.72rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.35rem 1rem .35rem .6rem;border-radius:50px;margin-bottom:2rem;
+}
+.hero-badge-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--lime);
+  animation:pulseDot 2s ease infinite;
+}
+@keyframes pulseDot{
+  0%,100%{box-shadow:0 0 0 0 rgba(212,247,107,.6)}
+  50%{box-shadow:0 0 0 5px rgba(212,247,107,0)}
+}
+
+/* DYNAMIC HEADLINE */
+h1.dynamic-h1{
+  font-size:clamp(2.8rem,5.2vw,5rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-0.04em;
+  margin-bottom:1.4rem;color:var(--white);
+}
+h1.dynamic-h1 .static-line{display:block}
+h1.dynamic-h1 .cycling-wrap{
+  display:block;
+  position:relative;
+  height:1.1em;
+  overflow:hidden;
+}
+.cycling-word{
+  display:block;
+  position:absolute;
+  left:0;top:0;width:100%;
+  color:var(--lime);
+  transform:translateY(100%);
+  opacity:0;
+  transition:transform .5s cubic-bezier(.16,1,.3,1), opacity .4s ease;
+}
+.cycling-word.active{
+  transform:translateY(0);
+  opacity:1;
+}
+.cycling-word.exit{
+  transform:translateY(-100%);
+  opacity:0;
+}
+
+.hero-sub{
+  font-size:1.05rem;line-height:1.75;color:var(--muted);
+  max-width:480px;margin-bottom:2.5rem;font-weight:400;
+}
+.hero-sub strong{color:var(--off-white);font-weight:500}
+
+.hero-actions{
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.55rem;
+  background:var(--lime);color:#080808;
+  padding:.85rem 2rem;border-radius:10px;
+  font-size:.95rem;font-weight:700;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(212,247,107,.3)}
+.btn-primary:hover::before{opacity:1}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.5rem;
+  color:var(--muted);text-decoration:none;
+  font-size:.88rem;font-weight:500;transition:color .2s;
+}
+.btn-ghost:hover{color:var(--white)}
+.btn-ghost svg{transition:transform .2s}
+.btn-ghost:hover svg{transform:translateX(3px)}
+
+.hero-stats{
+  display:flex;gap:0;border:1px solid var(--border);
+  border-radius:14px;background:var(--surface);
+  overflow:hidden;max-width:480px;
+}
+.stat{flex:1;padding:1.2rem 1.5rem;position:relative}
+.stat+.stat{border-left:1px solid var(--border)}
+.stat-num{
+  font-size:1.8rem;font-weight:800;letter-spacing:-0.04em;
+  color:var(--white);line-height:1;margin-bottom:.3rem;
+}
+.stat-num .accent{color:var(--lime)}
+.stat-label{font-size:.72rem;color:var(--muted);line-height:1.4;font-weight:400}
+
+/* HERO RIGHT */
+.hero-right{
+  display:flex;justify-content:center;align-items:center;
+  position:relative;z-index:2;
+  animation:fadeUp .9s .3s ease both;
+}
+
+/* PHONE */
+.phone-scene{position:relative;width:280px}
+
+.phone-frame{
+  background:#1c1c1e;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:50px;padding:14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 80px 120px rgba(0,0,0,.8),
+    0 30px 60px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;
+}
+
+/* Dynamic island */
+.dynamic-island{
+  width:110px;height:30px;
+  background:#000;border-radius:20px;
+  margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid rgba(255,255,255,.06);
+}
+.di-cam{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(40,40,40,1);
+  border:2px solid rgba(255,255,255,.04);
+}
+.di-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#1a3a1a;
+  box-shadow:0 0 6px rgba(0,200,0,.3);
+}
+
+/* Apple Wallet card — faithful replica */
+.wallet-card{
+  background:linear-gradient(160deg, #0d1535 0%, #0a1128 50%, #070c1e 100%);
+  border-radius:16px;
+  padding:18px 16px 14px;
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  margin-bottom:8px;
+}
+
+/* subtle inner glow top */
+.wallet-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+}
+
+.wc-brand-name{
+  font-size:1.5rem;font-weight:800;
+  color:#fff;letter-spacing:-.03em;
+  margin-bottom:14px;
+  line-height:1;
+}
+
+/* Star grid — 2 rows of 5 */
+.star-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+  margin-bottom:14px;
+}
+
+/* SVG Star shape matching the real card */
+.star-cell{
+  aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.star-svg{
+  width:100%;height:100%;
+  max-width:38px;max-height:38px;
+}
+.star-svg .star-path{
+  fill:none;
+  stroke:rgba(212,247,107,.25);
+  stroke-width:1.5;
+  transition:all .35s ease;
+}
+.star-svg.filled .star-path{
+  fill:var(--lime);
+  stroke:var(--lime);
+  filter:drop-shadow(0 0 6px rgba(212,247,107,.5));
+}
+
+/* Info row at bottom */
+.wc-info-row{
+  display:flex;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.07);
+  padding-top:10px;
+  margin-top:2px;
+}
+.wc-info-item{}
+.wc-info-label{
+  font-size:.52rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(255,255,255,.4);
+  margin-bottom:2px;
+}
+.wc-info-value{
+  font-size:.85rem;font-weight:600;color:rgba(255,255,255,.9);
+  letter-spacing:-.01em;
+}
+
+/* Barcode area */
+.wc-barcode{
+  background:rgba(255,255,255,.95);
+  border-radius:8px;
+  padding:8px 10px 6px;
+  margin-top:10px;
+  text-align:center;
+}
+.barcode-lines{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:1.5px;height:32px;margin-bottom:4px;
+}
+.barcode-lines span{
+  display:block;width:2px;background:#111;border-radius:1px;
+}
+.wc-barcode-label{
+  font-size:.5rem;color:#555;font-weight:500;letter-spacing:.05em;
+}
+
+/* Push notification */
+.push-notif{
+  background:#2c2c2e;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:9px 11px;
+  display:flex;align-items:center;gap:9px;
+  opacity:0;
+  animation:notifSlide 4s 2s ease infinite;
+}
+@keyframes notifSlide{
+  0%{opacity:0;transform:translateY(8px)}
+  12%,80%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(-4px)}
+}
+.notif-app-icon{
+  width:32px;height:32px;flex-shrink:0;
+  background:linear-gradient(135deg,#0d1535,#1a2a5e);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  border:1px solid rgba(255,255,255,.08);
+}
+.notif-content p{font-size:.62rem;color:rgba(255,255,255,.85);line-height:1.4}
+.notif-content small{font-size:.56rem;color:rgba(255,255,255,.3)}
+
+/* Floating cards */
+.float-card{
+  position:absolute;
+  background:var(--surface2);
+  border:1px solid var(--border-bright);
+  border-radius:12px;padding:9px 13px;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 16px 48px rgba(0,0,0,.5);
+  white-space:nowrap;
+}
+.float-card.fc-left{
+  left:-95px;top:28%;
+  animation:floatY 4s ease-in-out infinite;
+  z-index:10;
+}
+.float-card.fc-right{
+  right:-85px;bottom:22%;
+  animation:floatY 4.5s .5s ease-in-out infinite;
+  z-index:10;
+}
+@keyframes floatY{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+.fc-dot{
+  width:7px;height:7px;border-radius:50%;background:var(--lime);
+  box-shadow:0 0 8px var(--lime);flex-shrink:0;
+  animation:pulseDot 1.5s ease infinite;
+}
+.fc-text p{font-size:.66rem;font-weight:600;color:var(--off-white);line-height:1.3}
+.fc-text span{font-size:.58rem;color:var(--muted)}
+.fc-icon{font-size:1.1rem}
+
+/* LOGO STRIP */
+.logo-strip{
+  position:relative;z-index:1;
+  padding:1.8rem 5vw;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.strip-label{
+  text-align:center;font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--muted2);font-weight:600;margin-bottom:1.5rem;
+}
+.logos-track-wrap{
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);
+  mask-image:linear-gradient(90deg,transparent,black 10%,black 90%,transparent);
+}
+.logos-track{
+  display:flex;align-items:center;gap:4rem;
+  animation:marquee 32s linear infinite;width:max-content;
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.brand-chip{
+  display:flex;align-items:center;gap:.7rem;opacity:.5;
+  transition:opacity .3s;flex-shrink:0;cursor:default;
+}
+.brand-chip:hover{opacity:.8}
+.brand-icon{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;background:rgba(212,247,107,.07);flex-shrink:0;
+}
+.brand-name{font-size:.88rem;font-weight:600;color:var(--off-white);letter-spacing:-.01em}
+.tech-divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.tech-chip{display:flex;align-items:center;gap:.45rem;opacity:.28;flex-shrink:0}
+.tech-chip span{font-size:.78rem;font-weight:500;color:var(--off-white)}
+
+/* ── PROBLEM SECTION ── */
+.problem-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw;
+  background:var(--black);
+}
+.problem-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.prob-header{max-width:640px;margin-bottom:4rem}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.7rem;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--lime);margin-bottom:1.1rem;
+}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--lime)}
+.prob-header h2{
+  font-size:clamp(2rem,3.8vw,3rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem;
+}
+.prob-header h2 em{font-style:normal;color:var(--lime)}
+.prob-header p{font-size:.98rem;color:var(--muted);line-height:1.7;max-width:500px}
+
+.prob-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:1.2rem;
+}
+
+/* card */
+.pcard{
+  width:100%;background:var(--surface);
+  border:1px solid var(--border);border-radius:20px;
+  overflow:hidden;transition:border-color .3s;
+}
+.pcard:hover{border-color:rgba(255,255,255,.35)}
+
+/* stage */
+.pstage{
+  position:relative;height:200px;
+  background:var(--surface2);overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.ppanel{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  transition:transform .55s cubic-bezier(.4,0,.2,1),opacity .45s ease;
+}
+.ppanel-before{transform:translateY(0);opacity:1}
+.ppanel-after{transform:translateY(40px);opacity:0;pointer-events:none}
+.pstage.flipped .ppanel-before{transform:translateY(-40px);opacity:0}
+.pstage.flipped .ppanel-after{transform:translateY(0);opacity:1}
+
+/* badges */
+.pbadge{
+  position:absolute;top:12px;right:12px;z-index:2;
+  font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  padding:.22rem .7rem;border-radius:50px;transition:opacity .35s;
+}
+.pbadge-b{background:rgba(255,70,70,.1);color:#ff6060;border:1px solid rgba(255,70,70,.2)}
+.pbadge-a{background:rgba(212,247,107,.1);color:var(--lime);border:1px solid rgba(212,247,107,.25);opacity:0}
+.pstage.flipped .pbadge-b{opacity:0}
+.pstage.flipped .pbadge-a{opacity:1}
+
+/* card body */
+.pcbody{padding:1.3rem 1.5rem 1.5rem}
+.pclabel{
+  font-size:.67rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,80,80,.65);
+  margin-bottom:.4rem;transition:color .4s;
+}
+.pcard.flipped .pclabel{color:rgba(212,247,107,.65)}
+.pctitle{font-size:.98rem;font-weight:700;color:var(--white);letter-spacing:-.02em;line-height:1.3;margin-bottom:.35rem}
+.pcdesc{font-size:.82rem;color:var(--muted);line-height:1.62}
+
+/* ── shared mini-components ── */
+/* paper card */
+.paper-vis{
+  width:140px;height:80px;background:#1a1a1a;
+  border:1px dashed rgba(255,255,255,.1);border-radius:8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  position:relative;overflow:hidden;
+}
+.paper-vis::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 6px,rgba(255,60,60,.04) 6px,rgba(255,60,60,.04) 7px);
+}
+.holes-row{display:flex;gap:6px}
+.hole{width:15px;height:15px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.hole.s{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.18)}
+.paper-lbl{font-size:.56rem;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.08em}
+.vis-caption-bad{font-size:.67rem;color:rgba(255,80,80,.55);font-weight:500}
+.vis-caption-good{font-size:.67rem;color:rgba(212,247,107,.65);font-weight:500}
+
+/* wallet mini */
+.wallet-vis{
+  width:156px;
+  background:linear-gradient(150deg,#0c1a3a 0%,#070d1e 100%);
+  border:1px solid rgba(212,247,107,.18);border-radius:14px;
+  padding:11px 13px;box-shadow:0 0 24px rgba(212,247,107,.07);
+}
+.wv-name{font-size:.83rem;font-weight:700;color:#fff;margin-bottom:7px;letter-spacing:-.01em}
+.wv-items{display:flex;gap:3px;margin-bottom:7px;flex-wrap:wrap}
+.wv-item{font-size:13px;opacity:.2}
+.wv-item.lit{opacity:1}
+.wv-tag{
+  font-size:.52rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(212,247,107,.5);background:rgba(212,247,107,.07);
+  border:1px solid rgba(212,247,107,.15);padding:.18rem .55rem;
+  border-radius:50px;display:inline-block;
+}
+
+/* instagram mock */
+.insta-mock{display:flex;flex-direction:column;align-items:center;gap:6px;width:140px}
+.insta-post{
+  width:100%;height:56px;background:linear-gradient(135deg,#1a1a2e,#16213e);
+  border-radius:8px;border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:rgba(255,255,255,.25);
+}
+.insta-stats{display:flex;gap:12px}
+.istat span{display:block;font-size:.78rem;font-weight:800;color:#ff6060;text-align:center}
+.istat small{font-size:.52rem;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.05em}
+
+/* push notification mini */
+.push-vis{
+  width:168px;background:#1c1c1e;
+  border:1px solid rgba(255,255,255,.09);border-radius:12px;
+  padding:8px 10px;display:flex;align-items:center;gap:8px;
+}
+.push-ico{
+  width:30px;height:30px;flex-shrink:0;
+  background:linear-gradient(135deg,#0d1535,#1a2a5e);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;
+}
+.push-txt p{font-size:.6rem;color:rgba(255,255,255,.82);line-height:1.4}
+.push-txt small{font-size:.54rem;color:rgba(255,255,255,.28)}
+.push-rate{
+  margin-top:5px;
+  font-size:.62rem;font-weight:700;color:var(--lime);
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.15);
+  padding:.18rem .6rem;border-radius:50px;display:inline-block;
+}
+
+/* no-data mock */
+.nodata-vis{display:flex;flex-direction:column;align-items:center;gap:7px;width:150px}
+.nodata-icon{font-size:2rem;opacity:.12}
+.nodata-rows{width:100%;display:flex;flex-direction:column;gap:5px}
+.drow{height:9px;border-radius:4px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+.nodata-lbl{font-size:.58rem;color:rgba(255,80,80,.45);text-transform:uppercase;letter-spacing:.06em}
+
+/* dashboard mock */
+.dash-vis{width:158px;display:flex;flex-direction:column;gap:5px}
+.dash-row{display:flex;gap:4px}
+.dash-mini{
+  flex:1;background:rgba(212,247,107,.06);
+  border:1px solid rgba(212,247,107,.12);
+  border-radius:6px;padding:5px 7px;
+}
+.dash-mini span{display:block;font-size:.72rem;font-weight:800;color:var(--lime);letter-spacing:-.02em}
+.dash-mini small{font-size:.47rem;color:rgba(255,255,255,.32);text-transform:uppercase;letter-spacing:.04em}
+.dash-bars{display:flex;align-items:flex-end;gap:3px;height:30px;margin-top:4px}
+.dbar{flex:1;border-radius:3px 3px 0 0;background:rgba(212,247,107,.15);border:1px solid rgba(212,247,107,.2)}
+
+/* geo mock */
+.geo-vis{display:flex;flex-direction:column;align-items:center;gap:7px}
+.geo-ring{
+  width:88px;height:88px;border-radius:50%;
+  border:1px solid rgba(212,247,107,.2);
+  display:flex;align-items:center;justify-content:center;position:relative;
+  animation:geoP 2.5s ease-in-out infinite;
+}
+@keyframes geoP{
+  0%,100%{box-shadow:0 0 0 0 rgba(212,247,107,.1),0 0 0 8px rgba(212,247,107,.04)}
+  50%{box-shadow:0 0 0 10px rgba(212,247,107,.05),0 0 0 20px rgba(212,247,107,.02)}
+}
+.geo-center{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(212,247,107,.1);border:1px solid rgba(212,247,107,.3);
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+}
+.geo-pin{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:var(--lime);box-shadow:0 0 8px var(--lime);
+}
+.geo-lbl{font-size:.6rem;color:var(--lime);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+
+/* comp street */
+.street{display:flex;align-items:flex-end;gap:8px;position:relative}
+.bldg{display:flex;flex-direction:column;align-items:center;gap:3px}
+.bldg-body{border-radius:4px 4px 0 0}
+.bldg.yours .bldg-body{background:rgba(255,80,80,.06);border:1px solid rgba(255,80,80,.15);width:42px}
+.bldg.theirs .bldg-body{background:rgba(255,200,0,.05);border:1px solid rgba(255,200,0,.12);width:42px}
+.bldg span{font-size:.52rem;color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.04em}
+.person{
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,.45);margin-bottom:4px;
+  animation:walkAway 3s ease-in-out infinite;
+}
+@keyframes walkAway{0%,100%{transform:translateX(-6px)}50%{transform:translateX(10px)}}
+.street-gap{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:30px;padding-bottom:18px}
+
+/* ── HOW IT WORKS ── */
+/* ── HOW IT WORKS ── */
+.how-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw 6rem;
+  background:var(--surface);
+}
+.how-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.how-header{max-width:620px;margin-bottom:2.5rem}
+.how-section h2{
+  font-size:clamp(2rem,3.8vw,3rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem;
+}
+
+/* unified block */
+.how-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  align-items:stretch;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+
+/* LEFT image */
+.how-img-wrap{
+  position:relative;
+  min-height:100%;
+}
+.how-img{
+  position:absolute;inset:0;
+  overflow:hidden;
+}
+
+.how-img-slide{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.9);
+  opacity:0;
+  transition:opacity .6s ease;
+}
+.how-img-slide.active{opacity:1}
+
+
+/* RIGHT steps */
+.how-steps{
+  display:flex;flex-direction:column;
+  padding:2.5rem 2.5rem 2.5rem 2.8rem;
+  background:var(--surface);
+  justify-content:center;
+  gap:0;
+  border-left:1px solid var(--border);
+}
+
+.hstep{
+  display:flex;gap:1.4rem;
+  padding:1.6rem 0;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  position:relative;
+}
+.hstep:last-child{border-bottom:none}
+
+.hstep-line{
+  width:3px;flex-shrink:0;
+  border-radius:2px;
+  background:transparent;
+  transition:background .3s;
+  margin-top:4px;
+}
+.hstep.active .hstep-line{background:var(--lime)}
+
+.hstep-right{flex:1}
+
+.hstep-num{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:.4rem;
+  transition:color .3s;
+}
+.hstep.active .hstep-num{color:var(--lime)}
+
+.hstep-title{
+  font-size:1.2rem;font-weight:700;
+  color:rgba(255,255,255,.35);
+  letter-spacing:-.02em;line-height:1.3;
+  transition:color .3s;
+}
+.hstep.active .hstep-title{color:var(--white)}
+
+.hstep-desc{
+  font-size:.88rem;color:var(--muted);line-height:1.68;
+  max-height:0;overflow:hidden;
+  transition:max-height .45s ease, opacity .3s ease, margin .3s ease;
+  opacity:0;margin-top:0;
+}
+.hstep.active .hstep-desc{
+  max-height:140px;opacity:1;margin-top:.6rem;
+}
+
+
+/* ── TARJETAS SECTION ── */
+.cards-section{
+  position:relative;z-index:1;
+  padding:8rem 0 8rem;
+  background:var(--black);
+  overflow:hidden;
+}
+.cards-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.cards-header{
+  padding:0 5vw;
+  margin-bottom:4rem;
+}
+
+/* carousel track */
+.carousel-wrap{
+  position:relative;
+  padding:0 5vw;
+}
+.carousel-track{
+  display:flex;
+  gap:1.2rem;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding-bottom:1rem;
+  cursor:grab;
+  user-select:none;
+}
+.carousel-track::-webkit-scrollbar{display:none}
+.carousel-track.dragging{cursor:grabbing}
+
+/* card */
+.tcard{
+  flex-shrink:0;
+  width:300px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  scroll-snap-align:start;
+  transition:border-color .3s, transform .3s;
+  display:flex;
+  flex-direction:column;
+}
+.tcard:hover{
+  border-color:rgba(212,247,107,.25);
+  transform:translateY(-4px);
+}
+
+/* card visual top */
+.tcard-visual{
+  height:160px;
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* wallet preview inside card */
+.tw-card{
+  width:200px;
+  background:linear-gradient(150deg,#0c1a3a 0%,#070d1e 100%);
+  border:1px solid rgba(212,247,107,.15);
+  border-radius:14px;
+  padding:14px 16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  position:relative;
+  z-index:1;
+}
+.tw-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.tw-brand{font-size:.78rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.tw-type{
+  font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(212,247,107,.6);
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.15);
+  padding:.15rem .5rem;border-radius:50px;
+}
+.tw-body{min-height:36px;display:flex;align-items:center}
+.tw-footer{
+  margin-top:10px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.06);padding-top:8px;
+}
+.tw-footer-label{font-size:.52rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em}
+.tw-footer-val{font-size:.78rem;font-weight:700;color:rgba(255,255,255,.8)}
+
+/* visual bg glow per card type */
+.tcard-visual::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 120%, var(--tcard-glow,rgba(212,247,107,.06)) 0%, transparent 65%);
+}
+
+/* stamps row */
+.tw-stamps{display:flex;gap:3px;flex-wrap:wrap}
+.tw-stamp{
+  width:18px;height:18px;border-radius:4px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;font-size:.6rem;
+}
+.tw-stamp.on{
+  background:rgba(212,247,107,.15);border-color:rgba(212,247,107,.3);
+  color:var(--lime);
+}
+
+/* points bar */
+.tw-points{
+  display:flex;flex-direction:column;gap:4px;width:100%;
+}
+.tw-pts-val{font-size:1.1rem;font-weight:800;color:var(--lime);letter-spacing:-.03em;line-height:1}
+.tw-pts-lbl{font-size:.5rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em}
+.tw-pts-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-top:2px}
+.tw-pts-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--lime),rgba(212,247,107,.4))}
+
+/* cashback */
+.tw-cashback{font-size:1.6rem;font-weight:900;color:var(--lime);letter-spacing:-.04em}
+.tw-cashback span{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.4);margin-left:2px}
+
+/* membership badge */
+.tw-membership{
+  display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;
+}
+.tw-crown{font-size:1.4rem}
+.tw-tier{
+  font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--lime);
+}
+
+/* multipass */
+.tw-passes{display:flex;gap:3px}
+.tw-pass{
+  width:18px;height:26px;border-radius:4px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+}
+.tw-pass.used{background:rgba(212,247,107,.12);border-color:rgba(212,247,107,.25)}
+
+/* coupon */
+.tw-coupon{
+  display:flex;flex-direction:column;align-items:center;width:100%;
+  gap:2px;
+}
+.tw-coupon-val{font-size:1.3rem;font-weight:900;color:var(--lime);letter-spacing:-.04em}
+.tw-coupon-lbl{font-size:.52rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.06em}
+.tw-coupon-code{
+  font-size:.58rem;font-weight:700;letter-spacing:.12em;
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.15);
+  color:rgba(212,247,107,.6);padding:.15rem .5rem;border-radius:4px;margin-top:2px;
+}
+
+/* gift card */
+.tw-gift{
+  width:100%;height:32px;
+  background:linear-gradient(90deg,rgba(212,247,107,.12),rgba(212,247,107,.04));
+  border-radius:6px;border:1px solid rgba(212,247,107,.15);
+  display:flex;align-items:center;padding:0 8px;gap:6px;
+}
+.tw-gift-icon{font-size:.85rem}
+.tw-gift-val{font-size:.75rem;font-weight:700;color:var(--lime)}
+.tw-gift-lbl{font-size:.52rem;color:rgba(255,255,255,.3);margin-left:auto}
+
+/* card body */
+.tcard-body{padding:1.4rem 1.6rem 1.6rem;flex:1;display:flex;flex-direction:column}
+.tcard-icon{font-size:1.4rem;margin-bottom:.6rem}
+.tcard-name{
+  font-size:1.1rem;font-weight:700;color:var(--white);
+  letter-spacing:-.02em;margin-bottom:.45rem;
+}
+.tcard-desc{font-size:.84rem;color:var(--muted);line-height:1.65;flex:1}
+
+/* nav dots + arrows */
+.carousel-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.8rem 5vw 0;
+}
+.carousel-dots{display:flex;gap:.5rem;align-items:center}
+.cdot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  transition:all .3s;cursor:pointer;
+}
+.cdot.active{background:var(--lime);width:20px;border-radius:3px}
+.carousel-arrows{display:flex;gap:.6rem}
+.carr{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;color:var(--muted);
+  font-size:1rem;
+}
+.carr:hover{border-color:var(--lime);color:var(--lime)}
+.carr:disabled{opacity:.3;cursor:default}
+
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease;
+  padding:1.5rem;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+
+.modal{
+  background:var(--surface);
+  border:1px solid var(--border-bright);
+  border-radius:24px;
+  padding:2.5rem 2rem;
+  width:100%;max-width:360px;
+  text-align:center;
+  transform:translateY(16px) scale(.97);
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  position:relative;
+}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+
+.modal-close{
+  position:absolute;top:1rem;right:1rem;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  color:var(--muted);font-size:1rem;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.1);color:var(--white)}
+
+.modal-icon{font-size:2.2rem;margin-bottom:.8rem}
+.modal-name{
+  font-size:1.3rem;font-weight:800;color:var(--white);
+  letter-spacing:-.03em;margin-bottom:.4rem;
+}
+.modal-desc{
+  font-size:.85rem;color:var(--muted);line-height:1.6;
+  margin-bottom:2rem;max-width:260px;margin-left:auto;margin-right:auto;
+}
+
+.btn-add-wallet{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  width:100%;
+  background:var(--lime);color:#080808;
+  padding:.9rem 1.5rem;border-radius:12px;
+  font-size:.95rem;font-weight:700;text-decoration:none;
+  transition:transform .2s,box-shadow .2s;
+  letter-spacing:-.01em;
+}
+.btn-add-wallet:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(212,247,107,.25);
+}
+.btn-add-wallet-icon{font-size:1.1rem}
+
+.modal-note{
+  margin-top:1rem;
+  font-size:.72rem;color:rgba(255,255,255,.25);
+  line-height:1.5;
+}
+
+
+.tcard-demo-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  margin-top:1rem;
+  background:transparent;
+  border:1px solid var(--border-bright);
+  color:var(--lime);
+  font-size:.8rem;font-weight:600;
+  padding:.5rem 1rem;border-radius:8px;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  transition:all .2s;
+  letter-spacing:.01em;
+}
+.tcard-demo-btn:hover{
+  background:rgba(212,247,107,.08);
+  border-color:rgba(212,247,107,.3);
+}
+
+
+
+/* ── PERSONALIZA SECTION ── */
+.personaliza-section{
+  position:relative;z-index:1;
+  background:var(--surface);
+  overflow:hidden;
+}
+.personaliza-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+
+/* full-height split */
+.ps-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:100vh;
+}
+
+/* LEFT: form panel */
+.ps-left{
+  padding:6rem 4rem 6rem 5vw;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.ps-left-header{margin-bottom:3rem}
+.ps-left-header h2{
+  font-size:clamp(2rem,3.2vw,2.8rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.8rem;
+}
+.ps-left-header p{font-size:.95rem;color:var(--muted);line-height:1.7;max-width:380px}
+
+/* form tabs */
+.pform-tabs{
+  display:flex;gap:.5rem;margin-bottom:2rem;
+}
+.pform-tab{
+  padding:.5rem 1.2rem;border-radius:8px;
+  font-size:.8rem;font-weight:600;color:var(--muted);
+  cursor:pointer;border:1px solid var(--border);
+  transition:all .2s;background:transparent;
+  font-family:'Inter',sans-serif;
+}
+.pform-tab.active{
+  background:rgba(212,247,107,.1);
+  border-color:rgba(212,247,107,.3);
+  color:var(--lime);
+}
+
+.pform-panel{display:none;flex-direction:column;gap:1.4rem}
+.pform-panel.active{display:flex}
+
+.pfield label{
+  display:block;font-size:.65rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-bottom:.5rem;
+}
+.pfield input[type=text]{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:10px;
+  padding:.75rem 1rem;font-size:.92rem;color:var(--white);
+  font-family:'Inter',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.pfield input[type=text]:focus{border-color:rgba(212,247,107,.35)}
+.pfield input[type=text]::placeholder{color:rgba(255,255,255,.18)}
+
+.color-row{display:flex;align-items:center;gap:.8rem}
+.color-swatch{
+  width:42px;height:42px;border-radius:10px;
+  border:1px solid var(--border);cursor:pointer;
+  flex-shrink:0;overflow:hidden;position:relative;
+}
+.color-swatch input[type=color]{
+  position:absolute;inset:-4px;
+  width:calc(100% + 8px);height:calc(100% + 8px);
+  opacity:0;cursor:pointer;
+}
+
+/* upload */
+.upload-area{
+  border:1px dashed rgba(255,255,255,.1);
+  border-radius:12px;padding:1.2rem;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:.4rem;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  position:relative;overflow:hidden;min-height:80px;
+  background:rgba(255,255,255,.02);text-align:center;
+}
+.upload-area:hover{border-color:rgba(212,247,107,.3);background:rgba(212,247,107,.02)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.upload-area .ua-icon{font-size:1.3rem;opacity:.4}
+.upload-area .ua-label{font-size:.75rem;color:rgba(255,255,255,.35);font-weight:500}
+.upload-area .ua-sub{font-size:.62rem;color:rgba(255,255,255,.18)}
+.upload-area .ua-preview{
+  width:56px;height:56px;border-radius:8px;
+  object-fit:cover;display:none;
+}
+.upload-area.has-img .ua-icon,
+.upload-area.has-img .ua-label,
+.upload-area.has-img .ua-sub{display:none}
+.upload-area.has-img .ua-preview{display:block}
+
+/* slider */
+.slider-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.5rem;
+}
+.slider-val{
+  font-size:.85rem;font-weight:700;color:var(--lime);
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.15);
+  padding:.2rem .7rem;border-radius:6px;min-width:36px;text-align:center;
+}
+.pfield input[type=range]{
+  width:100%;accent-color:var(--lime);cursor:pointer;
+}
+
+/* RIGHT: sticky phone */
+.ps-right{
+  position:sticky;
+  top:0;height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:3rem 3rem;
+  gap:1.8rem;
+  background:var(--black);
+}
+
+/* wallet toggle */
+.wallet-toggle{
+  display:flex;gap:.4rem;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:50px;padding:.3rem;
+}
+.wtab{
+  padding:.4rem 1.1rem;border-radius:50px;
+  font-size:.75rem;font-weight:600;color:var(--muted);
+  cursor:pointer;border:none;background:transparent;
+  transition:all .2s;font-family:'Inter',sans-serif;
+}
+.wtab.active{background:var(--surface);color:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* phone frame */
+.ps-phone{
+  background:#1a1a1a;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:52px;
+  padding:16px 14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 80px 120px rgba(0,0,0,.8),
+    0 30px 60px rgba(0,0,0,.5);
+  width:240px;
+  flex-shrink:0;
+  position:relative;
+}
+/* side buttons */
+.ps-phone::before{
+  content:'';
+  position:absolute;
+  right:-3px;top:80px;
+  width:3px;height:60px;
+  background:rgba(255,255,255,.08);
+  border-radius:0 2px 2px 0;
+}
+.ps-phone::after{
+  content:'';
+  position:absolute;
+  left:-3px;top:70px;
+  width:3px;height:36px;
+  background:rgba(255,255,255,.08);
+  border-radius:2px 0 0 2px;
+  box-shadow:0 44px 0 rgba(255,255,255,.08), 0 80px 0 rgba(255,255,255,.08);
+}
+.ps-island{
+  width:100px;height:28px;background:#000;
+  border-radius:20px;margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;
+}
+.ps-island::before{
+  content:'';width:8px;height:8px;border-radius:50%;
+  background:#111;border:2px solid rgba(255,255,255,.04);
+}
+.ps-island::after{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#1a3a1a;
+  box-shadow:0 0 4px rgba(0,200,0,.25);
+}
+
+
+.gp-card-outer{
+  border-radius:10px;overflow:hidden;
+  padding:12px 14px;
+  display:flex;flex-direction:column;gap:0;
+  transition:background .25s;
+}
+.gp-header{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:8px;
+}
+.gp-icon-box{
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex-shrink:0;
+  font-size:.65rem;font-weight:700;color:rgba(0,0,0,.5);
+}
+.gp-type-lbl{font-size:.78rem;font-weight:600;color:rgba(0,0,0,.6);letter-spacing:.01em}
+.gp-title{
+  font-size:.88rem;font-weight:700;color:rgba(0,0,0,.75);
+  letter-spacing:-.01em;line-height:1.3;margin-bottom:8px;
+}
+.gp-info-row{
+  display:flex;justify-content:space-between;
+  margin-bottom:8px;
+}
+.gp-info-lbl{font-size:.46rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:rgba(0,0,0,.4);margin-bottom:1px}
+.gp-info-val{font-size:.75rem;font-weight:600;color:rgba(0,0,0,.65)}
+.gp-stamps-row{
+  display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;
+}
+.gp-stamp-item{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.gp-stamp-item.on{background:rgba(255,255,255,.55)}
+.gp-stamp-item img{width:100%;height:100%;object-fit:cover}
+.gp-stamp-item span{font-size:.65rem;color:rgba(0,0,0,.5)}
+
+/* ── iPhone mockup ── */
+.ps-phone{
+  width:220px;
+  background:#1a1a1a;
+  border-radius:48px;
+  padding:12px;
+  box-shadow:0 0 0 1px #2e2e2e,0 0 0 3px #111,0 40px 80px rgba(0,0,0,.6);
+  position:relative;
+  flex-shrink:0;
+}
+.ps-phone::before{content:'';position:absolute;right:-3px;top:80px;width:3px;height:56px;background:#2a2a2a;border-radius:0 2px 2px 0}
+.ps-phone::after{content:'';position:absolute;left:-3px;top:72px;width:3px;height:32px;background:#2a2a2a;border-radius:2px 0 0 2px;box-shadow:0 44px 0 #2a2a2a}
+.ps-phone-inner{
+  background:#fff;
+  border-radius:38px;
+  overflow:hidden;
+  min-height:460px;
+  display:flex;flex-direction:column;
+}
+.ps-island{
+  width:100px;height:26px;background:#000;border-radius:20px;
+  margin:10px auto 0;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.ps-island-cam{width:9px;height:9px;border-radius:50%;background:#111;border:1.5px solid rgba(255,255,255,.06)}
+.ps-island-dot{width:6px;height:6px;border-radius:50%;background:#0a1f0a;box-shadow:0 0 4px rgba(0,180,0,.3)}
+.ps-screen{
+  flex:1;background:#f2f2f2;padding:8px;
+  display:flex;flex-direction:column;
+}
+
+/* Apple Wallet card */
+.aw-card{
+  border-radius:10px;overflow:hidden;
+  flex:1;display:flex;flex-direction:column;
+  transition:background .3s;
+}
+.aw-body{flex:1;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px}
+.aw-head{display:flex;align-items:center;gap:8px}
+.aw-logo{
+  width:34px;height:34px;border-radius:8px;
+  background:rgba(255,255,255,.3);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:rgba(0,0,0,.4);flex-shrink:0;
+}
+.aw-logo img{width:100%;height:100%;object-fit:contain;display:none}
+.aw-name{font-size:15px;font-weight:800;letter-spacing:-.3px;transition:color .3s}
+.aw-strip{
+  border-radius:8px;background:rgba(0,0,0,.1);
+  padding:8px;min-height:64px;
+  display:flex;flex-wrap:wrap;gap:5px;
+  justify-content:center;align-items:center;
+  background-size:cover;background-position:center;transition:background .3s;
+}
+.aw-s{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:rgba(0,0,0,.5);overflow:hidden;
+}
+.aw-s.on{background:rgba(255,255,255,.6)}
+.aw-s img{width:100%;height:100%;object-fit:cover}
+.aw-info{display:flex;justify-content:space-between}
+.aw-il label{display:block;font-size:7px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.5;margin-bottom:1px}
+.aw-il p{font-size:11px;font-weight:600;opacity:.8}
+.aw-il.r{text-align:right}
+.aw-barcode{background:rgba(255,255,255,.92);border-radius:6px 6px 0 0;padding:6px 10px 4px;text-align:center;margin:0 -12px}
+.bc-lines{display:flex;align-items:flex-end;justify-content:center;gap:1.5px;height:28px;margin-bottom:3px}
+.bc-lbl{font-size:7px;color:#666;letter-spacing:.03em}
+
+/* Google Wallet card */
+.gw-card{
+  border-radius:10px;overflow:hidden;
+  flex:1;flex-direction:column;
+  display:none;transition:background .3s;
+}
+.gw-head{padding:10px 12px;display:flex;align-items:center;gap:8px;transition:background .3s}
+.gw-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(0,0,0,.5);overflow:hidden;flex-shrink:0}
+.gw-icon img{width:100%;height:100%;object-fit:cover;display:none}
+.gw-type{font-size:11px;font-weight:600;opacity:.7}
+.gw-title{font-size:12px;font-weight:700;padding:0 12px 6px;line-height:1.3;opacity:.75;transition:color .3s}
+.gw-info{display:flex;justify-content:space-between;padding:0 12px 6px}
+.gw-il label{display:block;font-size:7px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.45;margin-bottom:1px}
+.gw-il p{font-size:11px;font-weight:600;opacity:.75}
+.gw-il.r{text-align:right}
+.gw-bc{background:rgba(255,255,255,.88);margin:0 12px;border-radius:6px;padding:5px 8px 3px;text-align:center}
+.gw-stamps{display:flex;gap:5px;flex-wrap:wrap;padding:6px 12px 8px}
+.gw-s{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;overflow:hidden}
+.gw-s.on{background:rgba(255,255,255,.55)}
+.gw-s img{width:100%;height:100%;object-fit:cover}
+
+/* hint */
+
+/* hint */
+.ps-hint{
+  font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;
+  line-height:1.5;max-width:220px;
+}
+
+
+/* ── PERSONALIZA SECTION ── */
+.personaliza-section{
+  position:relative;z-index:1;
+  background:var(--surface);
+  overflow:hidden;
+}
+.personaliza-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+
+/* full-height split */
+.ps-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:100vh;
+}
+
+/* LEFT: form panel */
+.ps-left{
+  padding:6rem 4rem 6rem 5vw;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow-y:auto;
+}
+.ps-left-header{margin-bottom:3rem}
+.ps-left-header h2{
+  font-size:clamp(2rem,3.2vw,2.8rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.8rem;
+}
+.ps-left-header p{font-size:.95rem;color:var(--muted);line-height:1.7;max-width:380px}
+
+/* form tabs */
+.pform-tabs{
+  display:flex;gap:.5rem;margin-bottom:2rem;
+}
+.pform-tab{
+  padding:.5rem 1.2rem;border-radius:8px;
+  font-size:.8rem;font-weight:600;color:var(--muted);
+  cursor:pointer;border:1px solid var(--border);
+  transition:all .2s;background:transparent;
+  font-family:'Inter',sans-serif;
+}
+.pform-tab.active{
+  background:rgba(212,247,107,.1);
+  border-color:rgba(212,247,107,.3);
+  color:var(--lime);
+}
+
+.pform-panel{display:none;flex-direction:column;gap:1.4rem}
+.pform-panel.active{display:flex}
+
+.pfield label{
+  display:block;font-size:.65rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-bottom:.5rem;
+}
+.pfield input[type=text]{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:10px;
+  padding:.75rem 1rem;font-size:.92rem;color:var(--white);
+  font-family:'Inter',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.pfield input[type=text]:focus{border-color:rgba(212,247,107,.35)}
+.pfield input[type=text]::placeholder{color:rgba(255,255,255,.18)}
+
+.color-row{display:flex;align-items:center;gap:.8rem}
+.color-swatch{
+  width:42px;height:42px;border-radius:10px;
+  border:1px solid var(--border);cursor:pointer;
+  flex-shrink:0;overflow:hidden;position:relative;
+}
+.color-swatch input[type=color]{
+  position:absolute;inset:-4px;
+  width:calc(100% + 8px);height:calc(100% + 8px);
+  opacity:0;cursor:pointer;
+}
+
+/* upload */
+.upload-area{
+  border:1px dashed rgba(255,255,255,.1);
+  border-radius:12px;padding:1.2rem;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:.4rem;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  position:relative;overflow:hidden;min-height:80px;
+  background:rgba(255,255,255,.02);text-align:center;
+}
+.upload-area:hover{border-color:rgba(212,247,107,.3);background:rgba(212,247,107,.02)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+.upload-area .ua-icon{font-size:1.3rem;opacity:.4}
+.upload-area .ua-label{font-size:.75rem;color:rgba(255,255,255,.35);font-weight:500}
+.upload-area .ua-sub{font-size:.62rem;color:rgba(255,255,255,.18)}
+.upload-area .ua-preview{
+  width:56px;height:56px;border-radius:8px;
+  object-fit:cover;display:none;
+}
+.upload-area.has-img .ua-icon,
+.upload-area.has-img .ua-label,
+.upload-area.has-img .ua-sub{display:none}
+.upload-area.has-img .ua-preview{display:block}
+
+/* slider */
+.slider-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.5rem;
+}
+.slider-val{
+  font-size:.85rem;font-weight:700;color:var(--lime);
+  background:rgba(212,247,107,.08);border:1px solid rgba(212,247,107,.15);
+  padding:.2rem .7rem;border-radius:6px;min-width:36px;text-align:center;
+}
+.pfield input[type=range]{
+  width:100%;accent-color:var(--lime);cursor:pointer;
+}
+
+/* RIGHT: sticky phone */
+.ps-right{
+  position:sticky;
+  top:0;height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:3rem 3rem;
+  gap:1.8rem;
+  background:var(--black);
+}
+
+/* wallet toggle */
+.wallet-toggle{
+  display:flex;gap:.4rem;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:50px;padding:.3rem;
+}
+.wtab{
+  padding:.4rem 1.1rem;border-radius:50px;
+  font-size:.75rem;font-weight:600;color:var(--muted);
+  cursor:pointer;border:none;background:transparent;
+  transition:all .2s;font-family:'Inter',sans-serif;
+}
+.wtab.active{background:var(--surface);color:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* phone frame */
+.ps-phone{
+  background:#1a1a1a;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:52px;
+  padding:16px 14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 0 0 1px rgba(255,255,255,.03),
+    0 80px 120px rgba(0,0,0,.8),
+    0 30px 60px rgba(0,0,0,.5);
+  width:240px;
+  flex-shrink:0;
+  position:relative;
+}
+/* side buttons */
+.ps-phone::before{
+  content:'';
+  position:absolute;
+  right:-3px;top:80px;
+  width:3px;height:60px;
+  background:rgba(255,255,255,.08);
+  border-radius:0 2px 2px 0;
+}
+.ps-phone::after{
+  content:'';
+  position:absolute;
+  left:-3px;top:70px;
+  width:3px;height:36px;
+  background:rgba(255,255,255,.08);
+  border-radius:2px 0 0 2px;
+  box-shadow:0 44px 0 rgba(255,255,255,.08), 0 80px 0 rgba(255,255,255,.08);
+}
+.ps-island{
+  width:100px;height:28px;background:#000;
+  border-radius:20px;margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;
+}
+.ps-island::before{
+  content:'';width:8px;height:8px;border-radius:50%;
+  background:#111;border:2px solid rgba(255,255,255,.04);
+}
+.ps-island::after{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:#1a3a1a;
+  box-shadow:0 0 4px rgba(0,200,0,.25);
+}
+
+/* Apple card preview */
+.ap-card-wrap{border-radius:16px;overflow:hidden}
+.ap-card-bg{
+  padding:14px 14px 10px;
+  display:flex;flex-direction:column;
+  gap:0;
+  transition:background .25s;
+  min-height:200px;
+}
+.ap-logo-row{
+  display:flex;align-items:center;gap:8px;margin-bottom:6px;
+}
+.ap-logo{
+  width:32px;height:32px;border-radius:7px;
+  background:rgba(255,255,255,.15);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:rgba(255,255,255,.4);flex-shrink:0;
+}
+.ap-logo img{width:100%;height:100%;object-fit:cover;display:none}
+.ap-biz{font-size:.88rem;font-weight:800;letter-spacing:-.02em;transition:color .25s}
+.ap-type-lbl{font-size:.5rem;text-transform:uppercase;letter-spacing:.08em;opacity:.45;margin-bottom:8px}
+
+.ap-strip{
+  flex:1;border-radius:8px;overflow:hidden;
+  min-height:70px;background:rgba(0,0,0,.25);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  background-size:cover;background-position:center;
+}
+.ap-stamps{display:flex;flex-wrap:wrap;gap:4px;padding:6px;justify-content:center;position:relative;z-index:1}
+.ap-s{
+  width:22px;height:22px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;overflow:hidden;transition:all .2s;
+}
+.ap-s.on{background:rgba(255,255,255,.22)}
+.ap-s.off{background:rgba(255,255,255,.07);opacity:.4}
+.ap-s img{width:100%;height:100%;object-fit:cover}
+
+.ap-info{
+  display:flex;justify-content:space-between;
+  margin-top:8px;font-size:.5rem;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.ap-info-val{font-size:.7rem;font-weight:700;margin-top:1px}
+
+/* Google card preview */
+.gp-card-wrap{border-radius:16px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5);display:none}
+.gp-head{
+  padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .25s;
+}
+.gp-biz-block{}
+.gp-biz{font-size:.82rem;font-weight:700;transition:color .25s;letter-spacing:-.01em}
+.gp-sublbl{font-size:.5rem;text-transform:uppercase;letter-spacing:.07em;opacity:.4}
+.gp-logo{
+  width:30px;height:30px;border-radius:7px;
+  background:rgba(255,255,255,.15);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:rgba(255,255,255,.4);
+}
+.gp-logo img{width:100%;height:100%;object-fit:cover;display:none}
+.gp-strip-area{
+  height:80px;background:#111;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;color:rgba(255,255,255,.18);
+}
+.gp-strip-area img{width:100%;height:100%;object-fit:cover;display:none}
+.gp-body{padding:10px 14px;background:#1c1c1e}
+.gp-stamps{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:7px}
+.gp-s{
+  width:20px;height:20px;border-radius:4px;
+  background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.6rem;overflow:hidden;
+}
+.gp-s.on{background:rgba(212,247,107,.12);border:1px solid rgba(212,247,107,.2)}
+.gp-s img{width:100%;height:100%;object-fit:cover}
+.gp-foot{display:flex;justify-content:space-between}
+.gp-foot-item small{font-size:.47rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.28)}
+.gp-foot-item p{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.85)}
+
+/* hint */
+.ps-hint{
+  font-size:.72rem;color:rgba(255,255,255,.2);text-align:center;
+  line-height:1.5;max-width:220px;
+}
+
+
+/* ── HERRAMIENTAS SECTION ── */
+.tools-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw;
+  background:var(--surface);
+}
+.tools-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.tools-header{max-width:600px;margin-bottom:4rem}
+.tools-section h2{
+  font-size:clamp(2rem,3.8vw,3rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem;
+}
+
+.tools-inner{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:start;
+}
+
+/* LEFT: tab list */
+.tools-tabs{
+  display:flex;flex-direction:column;gap:.4rem;
+}
+.ttab{
+  display:flex;align-items:center;gap:1rem;
+  padding:1.2rem 1.4rem;
+  border-radius:14px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all .25s;
+  background:transparent;
+  text-align:left;
+  font-family:'Inter',sans-serif;
+  position:relative;
+  overflow:hidden;
+}
+.ttab::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--lime);border-radius:0 2px 2px 0;
+  transform:scaleY(0);transition:transform .25s;
+}
+.ttab.active{
+  background:rgba(212,247,107,.06);
+  border-color:rgba(212,247,107,.15);
+}
+.ttab.active::before{transform:scaleY(1)}
+.ttab:hover:not(.active){background:rgba(255,255,255,.03);border-color:var(--border)}
+
+.ttab-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  transition:all .25s;
+}
+.ttab.active .ttab-icon{
+  background:rgba(212,247,107,.1);
+  border-color:rgba(212,247,107,.2);
+}
+.ttab-text{}
+.ttab-name{
+  font-size:.95rem;font-weight:600;color:rgba(255,255,255,.5);
+  letter-spacing:-.01em;transition:color .25s;margin-bottom:.15rem;
+}
+.ttab.active .ttab-name{color:var(--white)}
+.ttab-sub{font-size:.78rem;color:var(--muted);line-height:1.4}
+
+/* RIGHT: visual panel */
+.tools-panel-wrap{
+  position:sticky;top:100px;
+}
+.tool-panel{
+  display:none;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  animation:panelIn .35s ease;
+}
+.tool-panel.active{display:block}
+@keyframes panelIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.tp-visual{
+  height:220px;
+  background:var(--black);
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  border-bottom:1px solid var(--border);
+}
+.tp-glow{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 100%, rgba(212,247,107,.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.tp-body{padding:1.8rem 2rem 2rem}
+.tp-tag{
+  font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--lime);margin-bottom:.6rem;
+}
+.tp-title{
+  font-size:1.3rem;font-weight:800;color:var(--white);
+  letter-spacing:-.03em;margin-bottom:.7rem;line-height:1.2;
+}
+.tp-desc{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem}
+.tp-stat{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(212,247,107,.07);border:1px solid rgba(212,247,107,.15);
+  padding:.35rem .9rem;border-radius:50px;
+  font-size:.78rem;font-weight:600;color:var(--lime);
+}
+
+/* ── VISUAL 1: Push notifications ── */
+.vis-push{display:flex;flex-direction:column;gap:8px;width:240px}
+.vp-notif{
+  background:#1c1c1e;border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:10px 12px;
+  display:flex;align-items:center;gap:10px;
+  transform:translateX(0);
+}
+.vp-notif:nth-child(1){animation:slideNotif 3s 0s ease infinite}
+.vp-notif:nth-child(2){animation:slideNotif 3s .4s ease infinite}
+.vp-notif:nth-child(3){animation:slideNotif 3s .8s ease infinite}
+@keyframes slideNotif{
+  0%{opacity:0;transform:translateX(20px)}
+  15%,85%{opacity:1;transform:translateX(0)}
+  100%{opacity:0;transform:translateX(-10px)}
+}
+.vp-app{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  background:linear-gradient(135deg,#0d1535,#1a2a5e);
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;
+}
+.vp-text p{font-size:.65rem;color:rgba(255,255,255,.8);line-height:1.4}
+.vp-text small{font-size:.58rem;color:rgba(255,255,255,.3)}
+.vp-rate{
+  margin-left:auto;font-size:.62rem;font-weight:700;
+  color:var(--lime);white-space:nowrap;
+}
+
+/* ── VISUAL 2: Geopush ── */
+.vis-geo{display:flex;flex-direction:column;align-items:center;gap:10px}
+.geo-map{
+  width:200px;height:140px;
+  background:#0a0f1a;border:1px solid var(--border);border-radius:12px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.geo-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:20px 20px;
+}
+.geo-ring-1,.geo-ring-2,.geo-ring-3{
+  position:absolute;border-radius:50%;border:1px solid rgba(212,247,107,.2);
+}
+.geo-ring-1{width:60px;height:60px;animation:geoRing 2s ease-in-out infinite}
+.geo-ring-2{width:100px;height:100px;animation:geoRing 2s .3s ease-in-out infinite}
+.geo-ring-3{width:140px;height:140px;animation:geoRing 2s .6s ease-in-out infinite}
+@keyframes geoRing{
+  0%,100%{opacity:.3;transform:scale(.95)}
+  50%{opacity:.7;transform:scale(1)}
+}
+.geo-center-dot{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--lime);box-shadow:0 0 12px var(--lime);
+  position:relative;z-index:2;
+  animation:geoPulse 1.5s ease infinite;
+}
+@keyframes geoPulse{
+  0%,100%{box-shadow:0 0 8px rgba(212,247,107,.6)}
+  50%{box-shadow:0 0 20px rgba(212,247,107,.9)}
+}
+.geo-client{
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.6);
+}
+.geo-notif-mini{
+  background:#1c1c1e;border:1px solid rgba(212,247,107,.2);
+  border-radius:8px;padding:6px 10px;
+  font-size:.6rem;color:rgba(255,255,255,.7);
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ── VISUAL 3: CRM ── */
+.vis-crm{width:220px}
+.crm-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:8px;
+}
+.crm-title{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em}
+.crm-count{font-size:.7rem;color:var(--lime);font-weight:600}
+.crm-row{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:8px;padding:8px 10px;margin-bottom:5px;
+}
+.crm-avatar{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:700;flex-shrink:0;
+}
+.crm-info{flex:1}
+.crm-name{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.8)}
+.crm-visits{font-size:.58rem;color:rgba(255,255,255,.35)}
+.crm-badge{
+  font-size:.55rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:.15rem .5rem;border-radius:50px;
+}
+.badge-champ{background:rgba(212,247,107,.12);color:var(--lime);border:1px solid rgba(212,247,107,.2)}
+.badge-loyal{background:rgba(80,160,255,.1);color:#5fa3ff;border:1px solid rgba(80,160,255,.2)}
+.badge-risk{background:rgba(255,160,60,.1);color:#ffa03c;border:1px solid rgba(255,160,60,.2)}
+.badge-sleep{background:rgba(255,255,255,.05);color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.08)}
+
+/* ── VISUAL 4: Segmentacion ── */
+.vis-seg{width:220px;display:flex;flex-direction:column;gap:6px}
+.seg-row{
+  display:flex;align-items:center;gap:8px;
+}
+.seg-label{font-size:.7rem;font-weight:600;color:rgba(255,255,255,.6);width:80px;flex-shrink:0}
+.seg-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.seg-bar{height:100%;border-radius:4px;animation:barGrow .8s ease both}
+@keyframes barGrow{from{width:0}}
+.seg-num{font-size:.65rem;color:var(--muted);width:30px;text-align:right;flex-shrink:0}
+
+/* ── VISUAL 5: Referidos ── */
+.vis-ref{display:flex;flex-direction:column;align-items:center;gap:10px;width:200px}
+.ref-chain{display:flex;align-items:center;gap:6px}
+.ref-node{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;border:2px solid var(--border);
+  position:relative;
+}
+.ref-node.origin{border-color:var(--lime);background:rgba(212,247,107,.1)}
+.ref-node.new{border-color:rgba(80,160,255,.4);background:rgba(80,160,255,.08);
+  animation:nodeAppear .5s ease both;
+}
+.ref-node.new:nth-child(3){animation-delay:.2s}
+.ref-node.new:nth-child(4){animation-delay:.4s}
+@keyframes nodeAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+.ref-arrow{font-size:.8rem;color:rgba(255,255,255,.2)}
+.ref-reward{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(212,247,107,.07);border:1px solid rgba(212,247,107,.15);
+  border-radius:8px;padding:6px 10px;font-size:.65rem;color:rgba(255,255,255,.6);
+}
+.ref-reward span{color:var(--lime);font-weight:700}
+
+/* ── VISUAL 6: Analitica ── */
+.vis-analytics{width:220px;display:flex;flex-direction:column;gap:6px}
+.an-cards{display:flex;gap:5px;margin-bottom:4px}
+.an-card{
+  flex:1;background:rgba(212,247,107,.06);border:1px solid rgba(212,247,107,.12);
+  border-radius:8px;padding:6px 8px;
+}
+.an-card span{display:block;font-size:.85rem;font-weight:800;color:var(--lime);letter-spacing:-.02em}
+.an-card small{font-size:.5rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.05em}
+.an-chart{display:flex;align-items:flex-end;gap:3px;height:48px}
+.an-bar{
+  flex:1;border-radius:3px 3px 0 0;
+  background:rgba(212,247,107,.15);border:1px solid rgba(212,247,107,.2);
+  transition:height .3s ease;
+}
+.an-bar.hi{background:rgba(212,247,107,.35);border-color:rgba(212,247,107,.5)}
+
+
+/* ── PRICING SECTION ── */
+.pricing-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw;
+  background:var(--black);
+}
+.pricing-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.pricing-header{max-width:600px;margin:0 auto 3rem;text-align:center}
+.pricing-section h2{
+  font-size:clamp(2rem,3.8vw,3rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem;
+}
+
+/* billing toggle */
+.billing-toggle{
+  display:inline-flex;align-items:center;gap:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:50px;padding:4px;margin-bottom:3.5rem;
+}
+.btab{
+  padding:.55rem 1.4rem;border-radius:50px;
+  font-size:.82rem;font-weight:600;color:var(--muted);
+  cursor:pointer;border:none;background:transparent;
+  transition:all .2s;font-family:'Inter',sans-serif;
+}
+.btab.active{background:var(--lime);color:#080808}
+.save-badge{
+  display:inline-flex;align-items:center;
+  background:rgba(212,247,107,.1);border:1px solid rgba(212,247,107,.2);
+  color:var(--lime);font-size:.68rem;font-weight:700;
+  padding:.2rem .7rem;border-radius:50px;margin-left:.6rem;
+}
+
+/* grid */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.2rem;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* card */
+.pcard{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  transition:border-color .3s,transform .3s;
+  display:flex;flex-direction:column;
+}
+.pcard:hover{transform:translateY(-4px);border-color:var(--border-bright)}
+.pcard.featured{
+  border-color:rgba(212,247,107,.3);
+  background:var(--surface2);
+}
+.pcard.featured:hover{border-color:rgba(212,247,107,.5)}
+
+/* popular badge */
+.popular-badge{
+  position:absolute;top:16px;right:16px;
+  font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--lime);color:#080808;
+  padding:.22rem .75rem;border-radius:50px;
+}
+
+/* card header */
+.pc-head{padding:2rem 2rem 1.5rem}
+.pc-plan{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.6rem;
+}
+.pcard.featured .pc-plan{color:var(--lime)}
+.pc-price-wrap{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.3rem}
+.pc-price{
+  font-size:3rem;font-weight:900;color:var(--white);
+  letter-spacing:-.05em;line-height:1;
+  transition:all .3s;
+}
+.pc-currency{font-size:1.2rem;font-weight:700;color:var(--muted);margin-bottom:.3rem}
+.pc-period{font-size:.78rem;color:var(--muted)}
+.pc-annual-note{
+  font-size:.72rem;color:var(--lime);
+  margin-top:.3rem;display:none;
+}
+.pc-annual-note.visible{display:block}
+
+/* setup fee */
+.pc-setup{
+  display:inline-flex;align-items:center;gap:.4rem;
+  margin-top:.8rem;
+  font-size:.75rem;color:var(--muted);
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  padding:.3rem .8rem;border-radius:50px;
+  position:relative;cursor:default;
+}
+.pc-setup .setup-tooltip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#1a1a1a;border:1px solid var(--border-bright);
+  border-radius:8px;padding:.6rem .9rem;
+  font-size:.72rem;color:rgba(255,255,255,.7);
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .2s;z-index:10;
+  line-height:1.5;text-align:center;
+}
+.pc-setup:hover .setup-tooltip{opacity:1}
+.setup-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.3);flex-shrink:0;
+}
+
+/* divider */
+.pc-divider{
+  height:1px;background:var(--border);margin:0 2rem;
+}
+
+/* features */
+.pc-features{padding:1.5rem 2rem 2rem;flex:1;display:flex;flex-direction:column;gap:0}
+
+/* plan highlights (the unique ones at top) */
+.pc-highlights{
+  display:flex;flex-direction:column;gap:.55rem;
+  margin-bottom:1.2rem;
+}
+.pc-feat{
+  display:flex;align-items:flex-start;gap:.7rem;
+  font-size:.83rem;color:rgba(255,255,255,.75);
+  line-height:1.4;position:relative;
+}
+.pc-feat-check{
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(212,247,107,.15);border:1px solid rgba(212,247,107,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;color:var(--lime);flex-shrink:0;margin-top:1px;
+}
+
+/* tooltip on feature */
+.pc-feat .feat-info{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  font-size:.55rem;color:var(--muted);cursor:default;
+  margin-left:4px;flex-shrink:0;position:relative;
+}
+.pc-feat .feat-info:hover::after{
+  content:attr(data-tip);
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:#1a1a1a;border:1px solid var(--border-bright);
+  border-radius:8px;padding:.5rem .8rem;
+  font-size:.7rem;color:rgba(255,255,255,.7);
+  white-space:normal;z-index:10;pointer-events:none;
+  line-height:1.5;width:200px;text-align:center;
+}
+
+/* "Todo lo del plan X, más:" separator */
+.pc-includes-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+  padding:.7rem 0 .7rem;
+  border-top:1px solid rgba(255,255,255,.06);
+  margin-top:.4rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.pc-includes-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06)}
+
+/* CTA */
+.pc-cta-wrap{padding:0 2rem 2rem}
+.btn-plan-cta{
+  display:block;text-align:center;
+  padding:.85rem;border-radius:10px;
+  font-size:.9rem;font-weight:700;text-decoration:none;
+  transition:all .2s;font-family:'Inter',sans-serif;cursor:pointer;
+  border:1.5px solid var(--border);
+  color:var(--white);background:transparent;width:100%;
+}
+.btn-plan-cta:hover{background:var(--surface2);border-color:var(--border-bright)}
+.pcard.featured .btn-plan-cta{
+  background:var(--lime);border-color:var(--lime);color:#080808;
+}
+.pcard.featured .btn-plan-cta:hover{
+  background:#c5e85f;border-color:#c5e85f;
+}
+
+@media(max-width:900px){
+  .pricing-grid{grid-template-columns:1fr}
+  .pcard.featured{order:-1}
+}
+
+
+/* ── FAQ SECTION ── */
+.faq-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw;
+  background:var(--surface);
+}
+.faq-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.faq-inner{
+  display:grid;
+  grid-template-columns:1fr 2fr;
+  gap:5rem;
+  align-items:start;
+}
+.faq-left{position:sticky;top:100px}
+.faq-left h2{
+  font-size:clamp(2rem,3.8vw,3rem);font-weight:800;
+  letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem;
+}
+.faq-left p{font-size:.95rem;color:var(--muted);line-height:1.7;margin-bottom:2rem}
+.faq-contact{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:rgba(212,247,107,.07);border:1px solid rgba(212,247,107,.15);
+  color:var(--lime);font-size:.85rem;font-weight:600;
+  padding:.7rem 1.2rem;border-radius:10px;text-decoration:none;
+  transition:all .2s;
+}
+.faq-contact:hover{background:rgba(212,247,107,.12);border-color:rgba(212,247,107,.3)}
+
+/* accordion */
+.faq-list{display:flex;flex-direction:column;gap:.6rem}
+.faq-item{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;
+  transition:border-color .2s;
+}
+.faq-item.open{border-color:rgba(212,247,107,.2)}
+.faq-q{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:1.3rem 1.5rem;cursor:pointer;
+  font-size:.95rem;font-weight:600;color:var(--white);
+  letter-spacing:-.01em;line-height:1.4;
+  background:transparent;border:none;width:100%;text-align:left;
+  font-family:'Inter',sans-serif;transition:color .2s;
+}
+.faq-q:hover{color:var(--lime)}
+.faq-item.open .faq-q{color:var(--lime)}
+.faq-icon{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;color:var(--muted);
+  transition:all .3s;
+}
+.faq-item.open .faq-icon{
+  background:rgba(212,247,107,.1);
+  border-color:rgba(212,247,107,.25);
+  color:var(--lime);
+  transform:rotate(45deg);
+}
+.faq-a{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease, padding .3s ease;
+  padding:0 1.5rem;
+}
+.faq-a-inner{
+  font-size:.88rem;color:var(--muted);line-height:1.75;
+  padding-bottom:1.3rem;
+  border-top:1px solid rgba(255,255,255,.05);
+  padding-top:1rem;
+}
+.faq-item.open .faq-a{max-height:400px;padding:0 1.5rem}
+
+@media(max-width:900px){
+  .faq-inner{grid-template-columns:1fr}
+  .faq-left{position:relative;top:auto}
+}
+
+
+/* ── CTA SECTION ── */
+.cta-section{
+  position:relative;z-index:1;
+  padding:10rem 5vw;
+  background:var(--black);
+  text-align:center;
+  overflow:hidden;
+}
+.cta-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+/* ambient glow */
+.cta-glow{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(ellipse, rgba(212,247,107,.07) 0%, transparent 65%);
+  pointer-events:none;
+}
+/* big watermark */
+.cta-section::after{
+  content:'VUELVO';
+  position:absolute;
+  font-size:22vw;font-weight:900;
+  letter-spacing:-.05em;
+  color:rgba(255,255,255,.022);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  white-space:nowrap;
+  font-family:'Inter',sans-serif;
+}
+.cta-inner{position:relative;z-index:2;max-width:600px;margin:0 auto}
+.cta-section h2{
+  font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;
+  letter-spacing:-.04em;line-height:1.05;
+  color:var(--white);margin-bottom:1.2rem;
+}
+.cta-section h2 em{font-style:normal;color:var(--lime)}
+.cta-section p{
+  font-size:1.05rem;color:var(--muted);line-height:1.75;
+  max-width:480px;margin:0 auto 2.5rem;font-weight:400;
+}
+.btn-cta-main{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:var(--lime);color:#080808;
+  padding:1rem 2.5rem;border-radius:12px;
+  font-size:1rem;font-weight:700;text-decoration:none;
+  letter-spacing:-.01em;
+  transition:transform .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.btn-cta-main::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-cta-main:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 48px rgba(212,247,107,.3);
+}
+.btn-cta-main:hover::before{opacity:1}
+.cta-note{
+  margin-top:1.2rem;
+  font-size:.78rem;color:rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+}
+.cta-note span{display:flex;align-items:center;gap:.3rem}
+.cta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.15)}
+
+
+/* ── FOOTER ── */
+.site-footer{
+  background:#050505;
+  border-top:1px solid var(--border);
+  padding:5rem 5vw 2.5rem;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns:1.8fr 1fr 1fr 1fr;
+  gap:4rem;
+  margin-bottom:4rem;
+}
+.footer-brand{}
+.footer-logo-img{
+  height:28px;width:auto;
+  mix-blend-mode:screen;
+  margin-bottom:1.2rem;
+  display:block;
+}
+.footer-tagline{
+  font-size:.88rem;color:rgba(255,255,255,.35);
+  line-height:1.7;max-width:260px;margin-bottom:1.8rem;
+}
+.footer-contact{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.8rem}
+.footer-contact a{
+  font-size:.82rem;color:rgba(255,255,255,.3);text-decoration:none;
+  transition:color .2s;display:flex;align-items:center;gap:.4rem;
+}
+.footer-contact a:hover{color:var(--lime)}
+.footer-socials{display:flex;gap:.8rem}
+.fsocial{
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.35);text-decoration:none;
+  font-size:.85rem;transition:all .2s;
+}
+.fsocial:hover{border-color:rgba(212,247,107,.3);color:var(--lime);background:rgba(212,247,107,.05)}
+
+/* nav columns */
+.footer-col h4{
+  font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);margin-bottom:1.2rem;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.footer-col ul a{
+  font-size:.84rem;color:rgba(255,255,255,.35);text-decoration:none;
+  transition:color .2s;
+}
+.footer-col ul a:hover{color:var(--white)}
+
+/* bottom bar */
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:2rem;
+  border-top:1px solid rgba(255,255,255,.06);
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{font-size:.78rem;color:rgba(255,255,255,.2)}
+.footer-legal{display:flex;gap:1.5rem}
+.footer-legal a{font-size:.78rem;color:rgba(255,255,255,.2);text-decoration:none;transition:color .2s}
+.footer-legal a:hover{color:rgba(255,255,255,.5)}
+
+/* wallet badges */
+.footer-wallets{display:flex;gap:.6rem;margin-top:1.5rem}
+.wallet-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;
+  padding:.4rem .8rem;text-decoration:none;
+  transition:border-color .2s;
+}
+.wallet-badge:hover{border-color:rgba(255,255,255,.25)}
+.wallet-badge span{font-size:.7rem;color:rgba(255,255,255,.5);line-height:1.2}
+.wallet-badge strong{display:block;font-size:.78rem;color:rgba(255,255,255,.75);font-weight:600}
+
+@media(max-width:900px){
+  .footer-top{grid-template-columns:1fr 1fr;gap:2.5rem}
+  .footer-brand{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .footer-top{grid-template-columns:1fr}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .tools-inner{grid-template-columns:1fr}
+  .tools-panel-wrap{position:relative;top:auto}
+  .tools-tabs{flex-direction:row;flex-wrap:wrap}
+  .ttab{flex:1;min-width:140px}
+}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .ps-inner{grid-template-columns:1fr}
+  .ps-right{position:relative;height:auto;min-height:auto;border-top:1px solid var(--border);padding:3rem 5vw}
+  .ps-left{padding:5rem 5vw 3rem}
+}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .ps-inner{grid-template-columns:1fr}
+  .ps-right{position:relative;height:auto;min-height:auto;border-top:1px solid var(--border);padding:3rem 5vw}
+  .ps-left{padding:5rem 5vw 3rem}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .personaliza-inner{grid-template-columns:1fr}
+  .wallet-previews{justify-content:center}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .how-inner{grid-template-columns:1fr;border-radius:16px}
+  .how-img-wrap{min-height:240px;position:relative}
+  .how-img{position:absolute;inset:0}
+  .how-steps{border-left:none;border-top:1px solid var(--border);padding:1.4rem}
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .how-inner{grid-template-columns:1fr;gap:0;border-radius:16px}
+  .how-img-wrap{position:relative;top:auto;align-self:auto}
+  .how-img{height:240px;border-radius:0}
+  .how-steps{margin-left:0;border-radius:0;border:none;border-top:1px solid var(--border);padding:1.4rem;justify-content:flex-start}
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;text-align:center;padding:8rem 5vw 4rem}
+  .hero-right{display:none}
+  .hero-stats{justify-content:center}
+  nav ul{display:none}
+  .hero-left > *{--tx:0}
+  .prob-grid{grid-template-columns:1fr}
+
+  /* Timeline — vertical on mobile */
+  .timeline{
+    grid-template-columns:1fr;
+    gap:0;
+    padding-left:2rem;
+    position:relative;
+  }
+  /* vertical line */
+  .timeline::before{
+    top:36px;bottom:36px;
+    left:35px;right:auto;
+    width:1px;height:auto;
+    background:linear-gradient(180deg,
+      var(--lime) 0%,
+      rgba(212,247,107,.4) 40%,
+      rgba(212,247,107,.15) 70%,
+      rgba(212,247,107,.06) 100%
+    );
+  }
+  .tstep{
+    flex-direction:row;
+    text-align:left;
+    align-items:flex-start;
+    gap:1.2rem;
+    padding:0 0 2.5rem 0;
+  }
+  .tstep:last-child{padding-bottom:0}
+  .tstep-num{
+    flex-shrink:0;
+    width:52px;height:52px;
+    font-size:1rem;
+    margin-bottom:0;
+  }
+  .tstep-visual{margin-top:1rem}
+}
+
+/* ── HOW IT WORKS ── */
+.how-section{
+  position:relative;z-index:1;
+  padding:8rem 5vw 6rem;
+  background:var(--surface);
+}
+.how-section::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-bright),transparent);
+}
+.how-header{max-width:580px;margin-bottom:5rem}
+.how-section h2{font-size:clamp(2rem,3.8vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem}
+
+.timeline{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+}
+
+/* connector line */
+.timeline::before{
+  content:'';
+  position:absolute;
+  top:36px;left:calc(12.5% + 1px);right:calc(12.5% + 1px);
+  height:1px;
+  background:linear-gradient(90deg,
+    var(--lime) 0%,
+    rgba(212,247,107,.4) 40%,
+    rgba(212,247,107,.15) 70%,
+    rgba(212,247,107,.06) 100%
+  );
+  z-index:0;
+}
+
+.tstep{
+  display:flex;flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:0 1.2rem;
+  position:relative;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.tstep.visible{opacity:1;transform:translateY(0)}
+
+/* number circle */
+.tstep-num{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:var(--surface2);
+  border:1px solid var(--border-bright);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  font-weight:900;
+  color:var(--white);
+  letter-spacing:-.03em;
+  position:relative;z-index:1;
+  transition:border-color .3s, box-shadow .3s;
+  margin-bottom:1.8rem;
+  flex-shrink:0;
+}
+.tstep:hover .tstep-num{
+  border-color:var(--lime);
+  box-shadow:0 0 0 4px rgba(212,247,107,.08), 0 0 24px rgba(212,247,107,.12);
+}
+.tstep-num .num-accent{color:var(--lime)}
+
+/* icon inside circle */
+.tstep-icon{
+  position:absolute;
+  bottom:-8px;right:-4px;
+  width:28px;height:28px;
+  background:var(--lime);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;
+  border:2px solid var(--surface);
+}
+
+.tstep-content{}
+.tstep-label{
+  font-size:.65rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--lime);
+  margin-bottom:.5rem;opacity:.7;
+}
+.tstep-title{
+  font-size:.98rem;font-weight:700;color:var(--white);
+  letter-spacing:-.02em;line-height:1.3;
+  margin-bottom:.5rem;
+}
+.tstep-desc{
+  font-size:.8rem;color:var(--muted);line-height:1.65;
+}
+
+/* visual card under each step */
+.tstep-visual{
+  width:100%;
+  margin-top:1.6rem;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:1rem;
+  min-height:90px;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .3s;
+}
+.tstep:hover .tstep-visual{border-color:rgba(212,247,107,.15)}
+
+/* visual contents */
+.vis-strategy{display:flex;flex-direction:column;gap:5px;width:100%}
+.vs-row{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:6px;padding:5px 8px;
+  font-size:.65rem;color:rgba(255,255,255,.55);
+}
+.vs-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.vs-check{
+  margin-left:auto;font-size:.6rem;
+  color:var(--lime);font-weight:700;
+}
+
+.vis-qr{display:flex;flex-direction:column;align-items:center;gap:6px}
+.qr-box{
+  width:52px;height:52px;
+  background:rgba(255,255,255,.92);
+  border-radius:6px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:1.5px;padding:4px;
+}
+.qr-cell{border-radius:1px}
+.qr-label{font-size:.58rem;color:var(--muted);text-align:center}
+
+.vis-form{display:flex;flex-direction:column;gap:5px;width:100%}
+.form-field{
+  height:22px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:5px;
+  padding:0 8px;
+  display:flex;align-items:center;
+  font-size:.58rem;color:rgba(255,255,255,.25);
+}
+.form-field.active{
+  border-color:rgba(212,247,107,.3);
+  color:rgba(255,255,255,.6);
+  background:rgba(212,247,107,.04);
+}
+.form-btn{
+  height:24px;
+  background:rgba(0,0,0,.8);
+  border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  gap:4px;font-size:.58rem;color:#fff;font-weight:600;
+  border:1px solid rgba(255,255,255,.1);
+  margin-top:2px;
+}
+.apple-w{width:14px;height:10px;background:linear-gradient(135deg,#ff6b6b,#4ecdc4,#45b7d1,#96ceb4);border-radius:2px}
+
+.vis-wallet{display:flex;flex-direction:column;align-items:center;gap:6px}
+.mini-phone{
+  width:44px;height:58px;
+  background:#1c1c1e;border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;padding:4px 3px;gap:3px;
+}
+.mp-notch{width:18px;height:4px;background:#000;border-radius:2px}
+.mp-card{
+  width:100%;flex:1;
+  background:linear-gradient(145deg,#0c1a3a,#070d1e);
+  border-radius:5px;border:1px solid rgba(212,247,107,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.55rem;color:var(--lime);font-weight:700;
+}
+.wallet-check{
+  font-size:.65rem;color:var(--lime);font-weight:600;
+  display:flex;align-items:center;gap:3px;
+}
+
+/* Elementor full-width fix */
+.elementor-widget-html, 
+.elementor-widget-html .elementor-widget-container,
+body .elementor-section,
+body .e-con {
+  width:100% !important;
+  max-width:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+html, body {
+  overflow-x:hidden;
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="https://vuelvocards.com/wp-content/uploads/2026/06/Logo-Vuelvo_Logo-blanco-scaled.png" alt="Vuelvo">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#como">Cómo funciona</a></li>
+    <li><a href="#tarjetas">Tarjetas</a></li>
+    <li><a href="#herramientas">Herramientas</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-nav-cta">Agenda tu demo gratis &rarr;</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Lealtad digital · El Salvador &amp; LATAM
+    </div>
+
+    <h1 class="dynamic-h1">
+      <span class="static-line">Convierte visitas</span>
+      <span class="static-line">en más</span>
+      <span class="cycling-wrap" id="cycler" aria-live="polite">
+        <span class="cycling-word active">ventas</span>
+        <span class="cycling-word">leales</span>
+        <span class="cycling-word">recurrentes</span>
+        <span class="cycling-word">fans</span>
+        <span class="cycling-word">ingresos</span>
+      </span>
+    </h1>
+
+    <p class="hero-sub">
+      Crea tu programa de lealtad en minutos. Tus clientes lo guardan en <strong>Apple o Google Wallet</strong> — sin descargar nada. Y no solo te damos el software: <strong>construimos la estrategia juntos.</strong>
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-primary">
+        Agenda tu demo gratis
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#como" class="btn-ghost">
+        Cómo funciona
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num"><span class="accent">+57%</span></div>
+        <div class="stat-label">más visitas recurrentes en 60 días</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span class="accent">+30%</span></div>
+        <div class="stat-label">aumento en ticket promedio</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num"><span class="accent">90%</span></div>
+        <div class="stat-label">tasa de apertura push</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="phone-scene">
+
+      <div class="float-card fc-left">
+        <div class="fc-dot"></div>
+        <div class="fc-text">
+          <p>Nuevo cliente registrado</p>
+          <span>D'Marito Foods · ahora</span>
+        </div>
+      </div>
+
+      <div class="phone-frame">
+        <div class="dynamic-island">
+          <div class="di-cam"></div>
+          <div class="di-dot"></div>
+        </div>
+
+        <div class="wallet-card">
+          <div class="wc-brand-name">D'Marito Foods</div>
+
+          <div class="star-grid" id="starGrid">
+            <!-- 10 stars generated by JS -->
+          </div>
+
+          <div class="wc-info-row">
+            <div class="wc-info-item">
+              <div class="wc-info-label">Siguiente premio</div>
+              <div class="wc-info-value" id="nextReward">3 sellos</div>
+            </div>
+            <div class="wc-info-item" style="text-align:right">
+              <div class="wc-info-label">Premios disponibles</div>
+              <div class="wc-info-value">0 recompensas</div>
+            </div>
+          </div>
+
+          <div class="wc-barcode">
+            <div class="barcode-lines" id="barcode"></div>
+            <div class="wc-barcode-label">Hecho por Vuelvo Cards</div>
+          </div>
+        </div>
+
+        <div class="push-notif">
+          <div class="notif-app-icon">⭐</div>
+          <div class="notif-content">
+            <p>¡3 sellos más para tu combo gratis! Visítanos hoy 🎁</p>
+            <small>D'Marito Foods · ahora mismo</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-card fc-right">
+        <div class="fc-icon">📲</div>
+        <div class="fc-text">
+          <p>En Apple &amp; Google Wallet</p>
+          <span>Sin descargar ninguna app</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="logo-strip">
+  <div class="strip-label">Negocios que ya usan Vuelvo</div>
+  <div class="logos-track-wrap">
+    <div class="logos-track">
+      <div class="brand-chip"><div class="brand-icon">🍗</div><span class="brand-name">D'Marito Food</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍔</div><span class="brand-name">Carne' Calle</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐟</div><span class="brand-name">Maurita's</span></div>
+      <div class="brand-chip"><div class="brand-icon">🧋</div><span class="brand-name">Ocha Bubble Tea</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐥</div><span class="brand-name">Que Rico Frito</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐷</div><span class="brand-name">Pig Brothers</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍨</div><span class="brand-name">Yolé</span></div>
+      <div class="brand-chip"><div class="brand-icon">☕️</div><span class="brand-name">Café Fulanos</span></div>
+      <div class="brand-chip"><div class="brand-icon">💐</div><span class="brand-name">Olivia Diseño Floral</span></div>
+      <div class="brand-chip"><div class="brand-icon">🌊</div><span class="brand-name">Nawi Beach House</span></div>
+      <div class="brand-chip"><div class="brand-icon">💅</div><span class="brand-name">The Beauty Room</span></div>
+      <div class="brand-chip"><div class="brand-icon">🥪</div><span class="brand-name">Luma Panaderia</span></div>
+      <div class="brand-chip"><div class="brand-icon">💇</div><span class="brand-name">Empire Salon</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍗</div><span class="brand-name">Willy's Wings</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍗</div><span class="brand-name">D'Marito Food</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍔</div><span class="brand-name">Carne' Calle</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐟</div><span class="brand-name">Maurita's</span></div>
+      <div class="brand-chip"><div class="brand-icon">🧋</div><span class="brand-name">Ocha Bubble Tea</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐥</div><span class="brand-name">Que Rico Frito</span></div>
+      <div class="brand-chip"><div class="brand-icon">🐷</div><span class="brand-name">Pig Brothers</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍨</div><span class="brand-name">Yolé</span></div>
+      <div class="brand-chip"><div class="brand-icon">☕️</div><span class="brand-name">Café Fulanos</span></div>
+      <div class="brand-chip"><div class="brand-icon">💐</div><span class="brand-name">Olivia Diseño Floral</span></div>
+      <div class="brand-chip"><div class="brand-icon">🌊</div><span class="brand-name">Nawi Beach House</span></div>
+      <div class="brand-chip"><div class="brand-icon">💅</div><span class="brand-name">The Beauty Room</span></div>
+      <div class="brand-chip"><div class="brand-icon">🥪</div><span class="brand-name">Luma Panaderia</span></div>
+      <div class="brand-chip"><div class="brand-icon">💇</div><span class="brand-name">Empire Salon</span></div>
+      <div class="brand-chip"><div class="brand-icon">🍗</div><span class="brand-name">Willy's Wings</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 20));
+
+// ── Build 8-point star SVG path
+function starPath(cx, cy, r1, r2, points) {
+  let d = '';
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? r1 : r2;
+    const angle = (Math.PI / points) * i - Math.PI / 2;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2);
+  }
+  return d + 'Z';
+}
+
+// ── Generate star grid (10 stars, 2 rows of 5)
+const grid = document.getElementById('starGrid');
+const TOTAL = 10;
+const FILLED = 7;
+const stars = [];
+
+for (let i = 0; i < TOTAL; i++) {
+  const cell = document.createElement('div');
+  cell.className = 'star-cell';
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('viewBox', '0 0 48 48');
+  svg.setAttribute('class', 'star-svg');
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('class', 'star-path');
+  path.setAttribute('d', starPath(24, 24, 20, 10, 8));
+  svg.appendChild(path);
+  cell.appendChild(svg);
+  grid.appendChild(cell);
+  stars.push(svg);
+}
+
+// ── Animate stamps filling one by one
+let filled = 0;
+function fillNext() {
+  if (filled >= FILLED) return;
+  stars[filled].classList.add('filled');
+  filled++;
+  const remaining = FILLED - filled;
+  const rewardEl = document.getElementById('nextReward');
+  if (rewardEl) rewardEl.textContent = (TOTAL - filled) + ' sellos';
+  if (filled < FILLED) setTimeout(fillNext, 380);
+}
+setTimeout(fillNext, 900);
+
+// ── Barcode generator
+const bc = document.getElementById('barcode');
+const heights = [28,20,32,16,28,24,18,30,22,28,14,26,32,18,22,28,16,30,24,20,28,18,32,14,26,22,30,18,28,24];
+heights.forEach((h, i) => {
+  const bar = document.createElement('span');
+  bar.style.height = h + 'px';
+  bar.style.width = (i % 3 === 0) ? '3px' : '2px';
+  bc.appendChild(bar);
+});
+
+// ── Cycling headline — slide up
+const cycler = document.getElementById('cycler');
+const words = cycler.querySelectorAll('.cycling-word');
+let current = 0;
+
+function cycleWord() {
+  const prev = current;
+  current = (current + 1) % words.length;
+  words[prev].classList.remove('active');
+  words[prev].classList.add('exit');
+  setTimeout(() => words[prev].classList.remove('exit'), 500);
+  words[current].classList.add('active');
+}
+
+setInterval(cycleWord, 2200);
+
+setInterval(cycleWord, 2200);
+</script>
+
+
+<!-- PROBLEM SECTION -->
+<section class="problem-section" id="problema">
+  <div class="prob-header">
+    <div class="section-eyebrow">El problema</div>
+    <h2>El 68% de tus clientes<br>no regresa. <em>Vuelvo</em> lo cambia.</h2>
+    <p>No es mala suerte — es falta de sistema. Estos son los 4 problemas más comunes y cómo Vuelvo los resuelve desde el día uno.</p>
+  </div>
+
+  <div class="prob-grid">
+
+    <!-- 1: Tarjeta física vs Wallet -->
+    <div class="pcard" data-idx="0">
+      <div class="pstage">
+        <div class="pbadge pbadge-b">Problema</div>
+        <div class="pbadge pbadge-a">✦ Vuelvo</div>
+        <div class="ppanel ppanel-before">
+          <div class="paper-vis">
+            <div class="holes-row">
+              <div class="hole s"></div><div class="hole s"></div><div class="hole s"></div>
+              <div class="hole"></div><div class="hole"></div>
+            </div>
+            <div class="paper-lbl">Tarjeta de papel</div>
+          </div>
+          <div class="vis-caption-bad">Se pierde. Se moja. Se olvida.</div>
+        </div>
+        <div class="ppanel ppanel-after">
+          <div class="wallet-vis">
+            <div class="wv-name">D'Marito Food</div>
+            <div class="wv-items">
+              <span class="wv-item lit">🍗</span><span class="wv-item lit">🍗</span><span class="wv-item lit">🍗</span>
+              <span class="wv-item">🍗</span><span class="wv-item">🍗</span>
+            </div>
+            <div class="wv-tag">Apple &amp; Google Wallet</div>
+          </div>
+          <div class="vis-caption-good">Siempre en su bolsillo 📲</div>
+        </div>
+      </div>
+      <div class="pcbody">
+        <div class="pclabel">Problema actual</div>
+        <div class="pctitle">El 73% abandona los programas de papel</div>
+        <div class="pcdesc">Se pierden antes de canjear la primera recompensa. Con Vuelvo, la tarjeta vive en el Wallet — nunca se pierde.</div>
+      </div>
+    </div>
+
+    <!-- 2: Instagram 2% vs Push 90% -->
+    <div class="pcard" data-idx="1">
+      <div class="pstage">
+        <div class="pbadge pbadge-b">Problema</div>
+        <div class="pbadge pbadge-a">✦ Vuelvo</div>
+        <div class="ppanel ppanel-before">
+          <div class="insta-mock">
+            <div class="insta-post">📸 Tu post de hoy</div>
+            <div class="insta-stats">
+              <div class="istat"><span>2%</span><small>alcance</small></div>
+              <div class="istat"><span>0</span><small>ventas</small></div>
+            </div>
+          </div>
+          <div class="vis-caption-bad">Publicas y rezas que lo vean.</div>
+        </div>
+        <div class="ppanel ppanel-after">
+          <div class="push-vis">
+            <div class="push-ico">⭐</div>
+            <div class="push-txt">
+              <p>¡Hoy 2x sellos en tu pedido! Solo hasta las 8pm 🎁</p>
+              <small>D'Marito Food · ahora</small>
+            </div>
+          </div>
+          <div class="push-rate">90% tasa de apertura</div>
+        </div>
+      </div>
+      <div class="pcbody">
+        <div class="pclabel">Problema actual</div>
+        <div class="pctitle">Publicas en Instagram y nadie lo ve</div>
+        <div class="pcdesc">El alcance orgánico está muerto. Con Vuelvo, envías push directo a la pantalla de tu cliente — sin algoritmos.</div>
+      </div>
+    </div>
+
+    <!-- 3: Sin datos vs Dashboard -->
+    <div class="pcard" data-idx="2">
+      <div class="pstage">
+        <div class="pbadge pbadge-b">Problema</div>
+        <div class="pbadge pbadge-a">✦ Vuelvo</div>
+        <div class="ppanel ppanel-before">
+          <div class="nodata-vis">
+            <div class="nodata-icon">❓</div>
+            <div class="nodata-rows">
+              <div class="drow" style="width:100%"></div>
+              <div class="drow" style="width:68%"></div>
+              <div class="drow" style="width:84%"></div>
+              <div class="drow" style="width:52%"></div>
+            </div>
+            <div class="nodata-lbl">Sin datos de clientes</div>
+          </div>
+          <div class="vis-caption-bad">Tomas decisiones a ciegas.</div>
+        </div>
+        <div class="ppanel ppanel-after">
+          <div class="dash-vis">
+            <div class="dash-row">
+              <div class="dash-mini"><span>142</span><small>Clientes activos</small></div>
+              <div class="dash-mini"><span>+57%</span><small>Retorno</small></div>
+            </div>
+            <div class="dash-bars">
+              <div class="dbar" style="height:42%"></div>
+              <div class="dbar" style="height:60%"></div>
+              <div class="dbar" style="height:48%"></div>
+              <div class="dbar" style="height:82%"></div>
+              <div class="dbar" style="height:66%"></div>
+              <div class="dbar" style="height:90%"></div>
+              <div class="dbar" style="height:74%"></div>
+            </div>
+          </div>
+          <div class="vis-caption-good">Sabes exactamente qué funciona.</div>
+        </div>
+      </div>
+      <div class="pcbody">
+        <div class="pclabel">Problema actual</div>
+        <div class="pctitle">No sabes quiénes son tus mejores clientes</div>
+        <div class="pcdesc">Sin datos, sin estrategia. Vuelvo te da CRM completo, historial de visitas y segmentación automática.</div>
+      </div>
+    </div>
+
+    <!-- 4: Competencia vs GeoPush -->
+    <div class="pcard" data-idx="3">
+      <div class="pstage">
+        <div class="pbadge pbadge-b">Problema</div>
+        <div class="pbadge pbadge-a">✦ Vuelvo</div>
+        <div class="ppanel ppanel-before">
+          <div class="street">
+            <div class="bldg yours">
+              <div class="bldg-body" style="height:58px"></div>
+              <span>Tu local</span>
+            </div>
+            <div class="street-gap">
+              <div class="person"></div>
+            </div>
+            <div class="bldg theirs">
+              <div class="bldg-body" style="height:78px"></div>
+              <span>Competencia</span>
+            </div>
+          </div>
+          <div class="vis-caption-bad">Tu cliente se va sin que lo sepas.</div>
+        </div>
+        <div class="ppanel ppanel-after">
+          <div class="geo-vis">
+            <div class="geo-ring">
+              <div class="geo-pin" style="top:16%;left:62%"></div>
+              <div class="geo-pin" style="top:58%;left:20%;width:6px;height:6px;opacity:.5"></div>
+              <div class="geo-center">📍</div>
+            </div>
+            <div class="geo-lbl">Geopush activado</div>
+          </div>
+          <div class="vis-caption-good">Llegas antes que la competencia.</div>
+        </div>
+      </div>
+      <div class="pcbody">
+        <div class="pclabel">Problema actual</div>
+        <div class="pctitle">La competencia ya les está enviando ofertas</div>
+        <div class="pcdesc">Vuelvo activa notificaciones automáticas cuando tu cliente está cerca. Tú llegas primero, siempre.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+// Problem cards — hover 1s delay to reveal solution, leave to reset
+(function(){
+  document.querySelectorAll('.pcard').forEach(function(card){
+    var stage = card.querySelector('.pstage');
+    var label = card.querySelector('.pclabel');
+    var timer = null;
+    var isAfter = false;
+
+    card.addEventListener('mouseenter', function(){
+      timer = setTimeout(function(){
+        isAfter = true;
+        stage.classList.add('flipped');
+        card.classList.add('flipped');
+        label.textContent = 'Solución Vuelvo';
+      }, 900);
+    });
+
+    card.addEventListener('mouseleave', function(){
+      clearTimeout(timer);
+      isAfter = false;
+      stage.classList.remove('flipped');
+      card.classList.remove('flipped');
+      label.textContent = 'Problema actual';
+    });
+  });
+})();
+</script>
+
+
+
+
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="como">
+  <div class="how-header">
+    <div class="section-eyebrow">Cómo funciona</div>
+    <h2>De cero a clientes<br>leales en 4 pasos.</h2>
+    <p style="font-size:.95rem;color:var(--muted);line-height:1.7;margin-top:.8rem;max-width:500px">No necesitas saber de tecnología. En menos de una semana tu programa está activo.</p>
+  </div>
+
+  <div class="how-inner" style="border-radius:20px;overflow:hidden;border:1px solid var(--border);">
+
+    <!-- LEFT: image -->
+    <div class="how-img-wrap">
+      <div class="how-img">
+        <img class="how-img-slide active" src="https://vuelvocards.com/wp-content/uploads/2026/06/ChatGPT-Image-Jun-9-2026-at-03_59_15-PM.png" alt="Paso 1" loading="lazy">
+        <img class="how-img-slide" src="https://vuelvocards.com/wp-content/uploads/2026/06/ChatGPT-Image-Jun-9-2026-at-04_10_34-PM.png" alt="Paso 2" loading="lazy">
+        <img class="how-img-slide" src="https://vuelvocards.com/wp-content/uploads/2026/06/ChatGPT-Image-Jun-9-2026-at-04_13_56-PM.png" alt="Paso 3" loading="lazy">
+        <img class="how-img-slide" src="https://vuelvocards.com/wp-content/uploads/2026/06/ChatGPT-Image-Jun-9-2026-at-04_17_32-PM.png" alt="Paso 4" loading="lazy">
+      </div>
+    </div>
+
+    <!-- RIGHT: steps -->
+    <div class="how-steps" id="howSteps">
+
+      <div class="hstep active" data-step="0">
+        <div class="hstep-line"></div>
+        <div class="hstep-right">
+          <div class="hstep-num">Paso 01</div>
+          <div class="hstep-title">Diseñamos tu programa juntos</div>
+          <div class="hstep-desc">Analizamos tu negocio y co-creamos el programa ideal — sellos, puntos, cashback o membresía. Personalizado con tu logo y colores.</div>
+        </div>
+      </div>
+
+      <div class="hstep" data-step="1">
+        <div class="hstep-line"></div>
+        <div class="hstep-right">
+          <div class="hstep-num">Paso 02</div>
+          <div class="hstep-title">Tu cliente escanea el código QR</div>
+          <div class="hstep-desc">Colocas el QR en tu local o lo compartes por redes sociales. En segundos tu cliente está en el proceso de registro.</div>
+        </div>
+      </div>
+
+      <div class="hstep" data-step="2">
+        <div class="hstep-line"></div>
+        <div class="hstep-right">
+          <div class="hstep-num">Paso 03</div>
+          <div class="hstep-title">Llena el formulario de emisión</div>
+          <div class="hstep-desc">Nombre, teléfono, email y cumpleaños. En 30 segundos tienes sus datos capturados y ellos están listos para su tarjeta.</div>
+        </div>
+      </div>
+
+      <div class="hstep" data-step="3">
+        <div class="hstep-line"></div>
+        <div class="hstep-right">
+          <div class="hstep-num">Paso 04</div>
+          <div class="hstep-title">Guarda la tarjeta en su Wallet</div>
+          <div class="hstep-desc">Un tap y la tarjeta queda en Apple o Google Wallet para siempre. Sin descargar ninguna app, sin contraseñas.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+// How it works — click to switch step + image
+(function(){
+  var steps = document.querySelectorAll('.hstep');
+  var imgs  = document.querySelectorAll('.how-img-slide');
+
+  function activate(idx){
+    steps.forEach(function(s){ s.classList.remove('active'); });
+    imgs.forEach(function(i){ i.classList.remove('active'); });
+    steps[idx].classList.add('active');
+    if(imgs[idx]) imgs[idx].classList.add('active');
+  }
+
+  steps.forEach(function(s,i){
+    s.addEventListener('click', function(){ activate(i); });
+  });
+})();
+</script>
+
+
+<!-- TARJETAS SECTION -->
+<section class="cards-section" id="tarjetas">
+  <div class="cards-header">
+    <div class="section-eyebrow">Tipos de tarjeta</div>
+    <h2 style="font-size:clamp(2rem,3.8vw,3rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;color:var(--white);margin-bottom:.9rem">8 programas.<br>Un solo sistema.</h2>
+    <p style="font-size:.98rem;color:var(--muted);line-height:1.7;max-width:500px">Elige el que mejor se adapta a tu negocio — o combínalos. Todos funcionan en Apple Wallet y Google Wallet.</p>
+  </div>
+
+  <div class="carousel-wrap">
+    <div class="carousel-track" id="carouselTrack">
+      
+    <div class="tcard" style="--tcard-glow:rgba(212,247,107,.08)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Tarjeta de Sellos</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-stamps">
+              <div class="tw-stamp on">✦</div><div class="tw-stamp on">✦</div><div class="tw-stamp on">✦</div>
+              <div class="tw-stamp on">✦</div><div class="tw-stamp on">✦</div>
+              <div class="tw-stamp"></div><div class="tw-stamp"></div><div class="tw-stamp"></div>
+              <div class="tw-stamp"></div><div class="tw-stamp"></div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Siguiente premio</div>
+              <div class="tw-footer-val">5 sellos más</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">🔖</div>
+        <div class="tcard-name">Sellos</div>
+        <div class="tcard-desc">Tus clientes acumulan sellos con cada visita y los canjean por premios. Sin tarjetas físicas, sin perderlas, todo en su celular.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Sellos" 
+          data-icon="🔖" 
+          data-desc="Prueba cómo se ve una tarjeta de sellos real en tu celular."
+          data-link="https://take.cards/AMnZ6">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(255,200,80,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Tarjeta de Puntos</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-points">
+              <div class="tw-pts-val">1,250</div>
+              <div class="tw-pts-lbl">puntos acumulados</div>
+              <div class="tw-pts-bar"><div class="tw-pts-fill" style="width:62%"></div></div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Canjeable desde</div>
+              <div class="tw-footer-val">500 pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">⭐</div>
+        <div class="tcard-name">Puntos</div>
+        <div class="tcard-desc">Tus clientes acumulan puntos con cada compra o visita y los canjean por descuentos, regalos o lo que tú decidas.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Puntos" 
+          data-icon="⭐" 
+          data-desc="Prueba cómo se ve una tarjeta de puntos real en tu celular."
+          data-link="https://take.cards/BSJfR">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(80,200,120,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Cashback</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-cashback">$3.50<span>disponible</span></div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Última recarga</div>
+              <div class="tw-footer-val">+$1.75 hoy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">💰</div>
+        <div class="tcard-name">Cashback</div>
+        <div class="tcard-desc">Tus clientes reciben un porcentaje de cada compra como saldo y lo usan en su próxima visita.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Cashback" 
+          data-icon="💰" 
+          data-desc="Prueba cómo se ve una tarjeta de cashback real en tu celular."
+          data-link="https://take.cards/v2hgJ">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(212,247,107,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Descuento Frecuente</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-cashback">10%<span>de descuento</span></div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Nivel actual</div>
+              <div class="tw-footer-val">Cliente Frecuente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">🏷️</div>
+        <div class="tcard-name">Descuento</div>
+        <div class="tcard-desc">Tus clientes frecuentes obtienen descuento automático cada vez que visitan. Entre más gastan, mayor es su descuento.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Descuento" 
+          data-icon="🏷️" 
+          data-desc="Prueba cómo se ve una tarjeta de descuento real en tu celular."
+          data-link="https://take.cards/sP1Vk">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(180,130,255,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Membresía</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-membership">
+              <div class="tw-crown">👑</div>
+              <div class="tw-tier">Miembro Gold</div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Válida hasta</div>
+              <div class="tw-footer-val">Dic 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">👑</div>
+        <div class="tcard-name">Membresía</div>
+        <div class="tcard-desc">Tus clientes pagan por pertenecer a tu club y acceden a beneficios exclusivos que tú defines.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Membresía" 
+          data-icon="👑" 
+          data-desc="Prueba cómo se ve una membresía real en tu celular."
+          data-link="https://take.cards/xebAM">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(80,160,255,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Multipass</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-passes">
+              <div class="tw-pass used"></div><div class="tw-pass used"></div><div class="tw-pass used"></div>
+              <div class="tw-pass"></div><div class="tw-pass"></div>
+              <div class="tw-pass"></div><div class="tw-pass"></div><div class="tw-pass"></div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Visitas restantes</div>
+              <div class="tw-footer-val">5 de 8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">🎫</div>
+        <div class="tcard-name">Multipass</div>
+        <div class="tcard-desc">Tus clientes compran un paquete de visitas por adelantado y lo van usando cada vez que regresan.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Multipass" 
+          data-icon="🎫" 
+          data-desc="Prueba cómo se ve un multipass real en tu celular."
+          data-link="https://take.cards/okTWX">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(255,120,80,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Cupón</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-coupon">
+              <div class="tw-coupon-val">20% OFF</div>
+              <div class="tw-coupon-lbl">primera visita</div>
+              <div class="tw-coupon-code">BIENVENIDO</div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Válido hasta</div>
+              <div class="tw-footer-val">30 Nov 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">✂️</div>
+        <div class="tcard-name">Cupón</div>
+        <div class="tcard-desc">Tus clientes nuevos reciben una oferta exclusiva para su primera visita y la muestran al llegar para canjearla.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Cupón" 
+          data-icon="✂️" 
+          data-desc="Prueba cómo se ve un cupón real en tu celular."
+          data-link="https://take.cards/6FwXZ">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    <div class="tcard" style="--tcard-glow:rgba(255,180,80,.06)">
+      <div class="tcard-visual">
+        <div class="tw-card">
+          <div class="tw-header">
+            <div class="tw-brand">Tu negocio</div>
+            <div class="tw-type">Gift Card</div>
+          </div>
+          <div class="tw-body">
+            <div class="tw-gift">
+              <div class="tw-gift-icon">🎁</div>
+              <div class="tw-gift-val">$25.00</div>
+              <div class="tw-gift-lbl">saldo disponible</div>
+            </div>
+          </div>
+          <div class="tw-footer">
+            <div>
+              <div class="tw-footer-label">Código</div>
+              <div class="tw-footer-val">GIFT-4821</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard-body">
+        <div class="tcard-icon">🎁</div>
+        <div class="tcard-name">Gift Card</div>
+        <div class="tcard-desc">Tus clientes compran un certificado digital con saldo y lo regalan o usan ellos mismos en tu negocio.</div>
+      
+        <button class="tcard-demo-btn" 
+          data-name="Gift Card" 
+          data-icon="🎁" 
+          data-desc="Prueba cómo se ve una gift card real en tu celular."
+          data-link="https://take.cards/I2Ulk">
+          Ver tarjeta demo &rarr;
+        </button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="carousel-nav">
+    <div class="carousel-dots" id="carouselDots">
+      <div class="cdot active" data-idx="0"></div>
+<div class="cdot" data-idx="1"></div>
+<div class="cdot" data-idx="2"></div>
+<div class="cdot" data-idx="3"></div>
+<div class="cdot" data-idx="4"></div>
+<div class="cdot" data-idx="5"></div>
+<div class="cdot" data-idx="6"></div>
+<div class="cdot" data-idx="7"></div>
+
+    </div>
+    <div class="carousel-arrows">
+      <button class="carr" id="carrPrev" aria-label="Anterior">&#8592;</button>
+      <button class="carr" id="carrNext" aria-label="Siguiente">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var track = document.getElementById('carouselTrack');
+  var dots  = document.querySelectorAll('.cdot');
+  var prev  = document.getElementById('carrPrev');
+  var next  = document.getElementById('carrNext');
+  var cards = document.querySelectorAll('.tcard');
+  var current = 0;
+
+  function getCardWidth(){
+    return cards[0] ? cards[0].offsetWidth + 16 : 316;
+  }
+
+  function scrollTo(idx){
+    idx = Math.max(0, Math.min(idx, cards.length - 1));
+    current = idx;
+    track.scrollTo({ left: idx * getCardWidth(), behavior: 'smooth' });
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+  }
+
+  dots.forEach(function(d,i){ d.addEventListener('click', function(){ scrollTo(i); }); });
+  prev.addEventListener('click', function(){ scrollTo(current - 1); });
+  next.addEventListener('click', function(){ scrollTo(current + 1); });
+
+  // drag to scroll
+  var isDown=false, startX=0, scrollLeft=0;
+  track.addEventListener('mousedown', function(e){
+    isDown=true; track.classList.add('dragging');
+    startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft;
+  });
+  track.addEventListener('mouseleave', function(){ isDown=false; track.classList.remove('dragging'); });
+  track.addEventListener('mouseup',    function(){ isDown=false; track.classList.remove('dragging'); });
+  track.addEventListener('mousemove',  function(e){
+    if(!isDown) return; e.preventDefault();
+    var x=e.pageX-track.offsetLeft;
+    track.scrollLeft=scrollLeft-(x-startX)*1.2;
+  });
+
+  // sync dots on scroll
+  track.addEventListener('scroll', function(){
+    var idx = Math.round(track.scrollLeft / getCardWidth());
+    if(idx !== current){
+      current = idx;
+      dots.forEach(function(d,i){ d.classList.toggle('active', i===idx); });
+    }
+  });
+})();
+</script>
+
+
+<!-- MODAL -->
+<div class="modal-overlay" id="cardModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-icon" id="modalIcon">🔖</div>
+    <div class="modal-name" id="modalName">Sellos</div>
+    <div class="modal-desc" id="modalDesc">Prueba cómo se ve en tu celular.</div>
+    <a href="#" class="btn-add-wallet" id="modalLink" target="_blank">
+      <span class="btn-add-wallet-icon">📲</span>
+      Agregar a Wallet
+    </a>
+    <div class="modal-note">Funciona en Apple Wallet y Google Wallet.<br>Sin descargar ninguna app.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var overlay  = document.getElementById('cardModal');
+  var closeBtn = document.getElementById('modalClose');
+  var icon     = document.getElementById('modalIcon');
+  var name     = document.getElementById('modalName');
+  var desc     = document.getElementById('modalDesc');
+  var link     = document.getElementById('modalLink');
+
+  document.querySelectorAll('.tcard-demo-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      icon.textContent = btn.dataset.icon;
+      name.textContent = btn.dataset.name;
+      desc.textContent = btn.dataset.desc;
+      link.href = btn.dataset.link;
+      overlay.classList.add('open');
+    });
+  });
+
+  function close(){ overlay.classList.remove('open'); }
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+})();
+</script>
+
+
+
+
+<!-- PERSONALIZA SECTION -->
+<section class="personaliza-section" id="personaliza">
+  <div class="ps-inner">
+
+    <!-- LEFT: form -->
+    <div class="ps-left">
+      <div class="ps-left-header">
+        <div class="section-eyebrow">Personalización</div>
+        <h2>Tu tarjeta,<br>tu identidad.</h2>
+        <p>Sube tu logo, elige tus colores y ve exactamente cómo se verá antes de publicarla.</p>
+      </div>
+
+      <div class="pform-tabs">
+        <button class="pform-tab active" data-tab="general">General</button>
+        <button class="pform-tab" data-tab="imagenes">Imágenes</button>
+        <button class="pform-tab" data-tab="sellos">Sellos</button>
+      </div>
+
+      <!-- GENERAL -->
+      <div class="pform-panel active" id="tab-general">
+        <div class="pfield">
+          <label>Nombre del negocio</label>
+          <input type="text" id="inputName" placeholder="Ej: D'Marito Food" maxlength="30">
+        </div>
+        <div class="pfield">
+          <label>Color de fondo</label>
+          <div class="color-row">
+            <div class="color-swatch" id="swatchBg" style="background:#8d8600">
+              <input type="color" id="inputBg" value="#c4aa7a">
+            </div>
+            <input type="text" id="inputBgHex" value="#c4aa7a">
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Color del texto</label>
+          <div class="color-row">
+            <div class="color-swatch" id="swatchText" style="background:#ffffff">
+              <input type="color" id="inputText" value="#000000">
+            </div>
+            <input type="text" id="inputTextHex" value="#000000">
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGENES -->
+      <div class="pform-panel" id="tab-imagenes">
+        <div class="pfield">
+          <label>Logotipo (Apple Wallet)</label>
+          <div class="upload-area" id="uaLogo">
+            <input type="file" accept="image/*" id="uploadLogo">
+            <img class="ua-preview" id="prevLogo" alt="">
+            <div class="ua-icon">🖼️</div>
+            <span class="ua-label">↑ Subir logotipo</span>
+            <span class="ua-sub">PNG transparente recomendado</span>
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Imagen de franja (fondo de sellos)</label>
+          <div class="upload-area" id="uaStrip">
+            <input type="file" accept="image/*" id="uploadStrip">
+            <img class="ua-preview" id="prevStrip" alt="">
+            <div class="ua-icon">🎨</div>
+            <span class="ua-label">↑ Subir imagen de franja</span>
+            <span class="ua-sub">Se muestra detrás de los sellos</span>
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Ícono pequeño (Google Wallet)</label>
+          <div class="upload-area" id="uaIcon">
+            <input type="file" accept="image/*" id="uploadIcon">
+            <img class="ua-preview" id="prevIcon" alt="">
+            <div class="ua-icon">📱</div>
+            <span class="ua-label">↑ Subir ícono (200×200 px)</span>
+            <span class="ua-sub">Logo cuadrado para Google Wallet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SELLOS -->
+      <div class="pform-panel" id="tab-sellos">
+        <div class="pfield">
+          <label>Imagen sello activo</label>
+          <div class="upload-area" id="uaStampOn">
+            <input type="file" accept="image/*" id="uploadStampOn">
+            <img class="ua-preview" id="prevStampOn" alt="">
+            <div class="ua-icon">✦</div>
+            <span class="ua-label">↑ Subir sello activo</span>
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Imagen sello inactivo</label>
+          <div class="upload-area" id="uaStampOff">
+            <input type="file" accept="image/*" id="uploadStampOff">
+            <img class="ua-preview" id="prevStampOff" alt="">
+            <div class="ua-icon">○</div>
+            <span class="ua-label">↑ Subir sello inactivo</span>
+          </div>
+        </div>
+        <div class="pfield">
+          <label>Total de sellos</label>
+          <div class="slider-row">
+            <span style="font-size:.82rem;color:var(--muted)">Sellos para completar</span>
+            <span class="slider-val" id="totalVal">10</span>
+          </div>
+          <input type="range" id="inputTotal" min="3" max="20" value="10">
+        </div>
+        <div class="pfield">
+          <label>Sellos obtenidos (preview)</label>
+          <div class="slider-row">
+            <span style="font-size:.82rem;color:var(--muted)">Para visualizar el estado</span>
+            <span class="slider-val" id="earnedVal">7</span>
+          </div>
+          <input type="range" id="inputEarned" min="0" max="10" value="7">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: sticky phone -->
+    <div class="ps-right">
+      <div class="wallet-toggle">
+        <button class="wtab active" data-w="apple">🍎 Apple</button>
+        <button class="wtab" data-w="google">🤖 Google</button>
+      </div>
+
+      <div class="ps-phone" id="apWrap">
+        <div class="ps-phone-inner">
+          <div class="ps-island"><div class="ps-island-cam"></div><div class="ps-island-dot"></div></div>
+          <div class="ps-screen">
+            <div class="aw-card" id="awCard" style="background:#c4aa7a">
+              <div class="aw-body">
+                <div class="aw-head">
+                  <div class="aw-logo" id="awLogo"><span id="awLogoTxt">Logo</span><img id="awLogoImg" alt=""></div>
+                  <div class="aw-name" id="awName" style="color:#000">Vuelvo</div>
+                </div>
+                <div class="aw-strip" id="awStrip"><div id="awStamps" style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;width:100%"></div></div>
+                <div class="aw-info">
+                  <div class="aw-il"><label>Nombre</label><p>Sin datos</p></div>
+                  <div class="aw-il r"><label>Siguiente premio</label><p id="awNext">3 sellos</p></div>
+                </div>
+              </div>
+              <div class="aw-barcode">
+                <div class="bc-lines" id="awBc"></div>
+                <div class="bc-lbl">Hecho por Vuelvo Cards</div>
+              </div>
+            </div>
+            <div class="gw-card" id="gwCard" style="background:#c4aa7a">
+              <div class="gw-head" id="gwHead" style="background:#c4aa7a">
+                <div class="gw-icon" id="gwIcon"><span id="gwIconTxt">V</span><img id="gwIconImg" alt=""></div>
+                <div class="gw-type">Sellos</div>
+              </div>
+              <div class="gw-title" id="gwTitle">Su negocio puede tener<br>estas promociones</div>
+              <div class="gw-info">
+                <div class="gw-il"><label>Nombre</label><p>Sin datos</p></div>
+                <div class="gw-il r"><label>Siguiente premio</label><p id="gwNext">3 sellos</p></div>
+              </div>
+              <div class="gw-bc"><div class="bc-lines" id="gwBc"></div><div class="bc-lbl" style="color:#888">630120-816-306</div></div>
+              <div class="gw-stamps" id="gwStamps"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps-hint">Edita el formulario y ve los cambios en tiempo real ✦</div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<script>
+(function(){
+  var S={name:'Vuelvo',bg:'#c4aa7a',tc:'#000000',logo:'',strip:'',icon:'',sOn:'',sOff:'',total:5,earned:2};
+
+  function mkBc(el){
+    el.innerHTML='';
+    [26,16,30,14,26,20,16,28,18,26,12,24,30,16,20,26,14,28,22,18,26,16,30,12,24,20,28,16,26,22].forEach(function(h,i){
+      var d=document.createElement('div');
+      d.style.cssText='width:'+(i%3===0?'2.5px':'1.5px')+';height:'+h+'px;background:#111;border-radius:1px;flex-shrink:0';
+      el.appendChild(d);
+    });
+  }
+  mkBc(document.getElementById('awBc'));
+  mkBc(document.getElementById('gwBc'));
+
+  function stamps(){
+    var aw=document.getElementById('awStamps'),gw=document.getElementById('gwStamps');
+    aw.innerHTML='';gw.innerHTML='';
+    var rem=S.total-S.earned;
+    var nxt=rem>0?rem+' sello'+(rem>1?'s':''):'Premio listo!';
+    document.getElementById('awNext').textContent=nxt;
+    document.getElementById('gwNext').textContent=nxt;
+    for(var i=0;i<S.total;i++){
+      var on=i<S.earned;
+      var a=document.createElement('div');a.className='aw-s'+(on?' on':'');
+      if(on&&S.sOn){var ai=document.createElement('img');ai.src=S.sOn;a.appendChild(ai);}
+      else if(!on&&S.sOff){var ai2=document.createElement('img');ai2.src=S.sOff;a.appendChild(ai2);}
+      else{a.textContent=on?'●':'○';}
+      aw.appendChild(a);
+      var g=document.createElement('div');g.className='gw-s'+(on?' on':'');
+      if(on&&S.sOn){var gi=document.createElement('img');gi.src=S.sOn;g.appendChild(gi);}
+      else if(!on&&S.sOff){var gi2=document.createElement('img');gi2.src=S.sOff;g.appendChild(gi2);}
+      else{g.textContent=on?'●':'○';}
+      gw.appendChild(g);
+    }
+  }
+
+  function update(){
+    var nm=S.name||'Tu Negocio';
+    document.getElementById('awCard').style.background=S.bg;
+    document.getElementById('awName').textContent=nm;
+    document.getElementById('awName').style.color=S.tc;
+    document.getElementById('gwHead').style.background=S.bg;
+    document.getElementById('gwCard').style.background=S.bg;
+    stamps();
+  }
+
+  document.querySelectorAll('.pform-tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.pform-tab').forEach(function(x){x.classList.remove('active')});
+      document.querySelectorAll('.pform-panel').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.wtab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.wtab').forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      var w=t.dataset.w;
+      document.getElementById('awCard').style.display=w==='apple'?'flex':'none';
+      document.getElementById('gwCard').style.display=w==='google'?'flex':'none';
+    });
+  });
+
+  document.getElementById('inputName').addEventListener('input',function(){S.name=this.value;update();});
+
+  function bindColor(ci,hi,si,k){
+    var c=document.getElementById(ci),h=document.getElementById(hi),s=document.getElementById(si);
+    c.addEventListener('input',function(){S[k]=this.value;h.value=this.value;s.style.background=this.value;update();});
+    h.addEventListener('input',function(){if(/^#[0-9a-fA-F]{6}$/.test(this.value)){S[k]=this.value;c.value=this.value;s.style.background=this.value;update();}});
+  }
+  bindColor('inputBg','inputBgHex','swatchBg','bg');
+  bindColor('inputText','inputTextHex','swatchText','tc');
+
+  function bindUpload(ii,pi,ai,k,cb){
+    document.getElementById(ii).addEventListener('change',function(){
+      var f=this.files[0];if(!f)return;
+      var r=new FileReader();
+      r.onload=function(e){
+        S[k]=e.target.result;
+        var p=document.getElementById(pi);p.src=e.target.result;p.style.display='block';
+        document.getElementById(ai).classList.add('has-img');
+        if(cb)cb(e.target.result);update();
+      };r.readAsDataURL(f);
+    });
+  }
+  bindUpload('uploadLogo','prevLogo','uaLogo','logo',function(src){
+    var a=document.getElementById('awLogoImg');a.src=src;a.style.display='block';document.getElementById('awLogoTxt').style.display='none';
+  });
+  bindUpload('uploadStrip','prevStrip','uaStrip','strip',function(src){
+    var s=document.getElementById('awStrip');s.style.backgroundImage='url('+src+')';s.style.backgroundSize='cover';s.style.backgroundPosition='center';
+  });
+  bindUpload('uploadIcon','prevIcon','uaIcon','icon',function(src){
+    var g=document.getElementById('gwIconImg');g.src=src;g.style.display='block';document.getElementById('gwIconTxt').style.display='none';
+  });
+  bindUpload('uploadStampOn','prevStampOn','uaStampOn','sOn',function(){update();});
+  bindUpload('uploadStampOff','prevStampOff','uaStampOff','sOff',function(){update();});
+
+  document.getElementById('inputTotal').addEventListener('input',function(){
+    S.total=+this.value;document.getElementById('totalVal').textContent=this.value;
+    var ear=document.getElementById('inputEarned');ear.max=this.value;
+    if(S.earned>S.total){S.earned=S.total;ear.value=S.earned;document.getElementById('earnedVal').textContent=S.earned;}
+    update();
+  });
+  document.getElementById('inputEarned').addEventListener('input',function(){
+    S.earned=+this.value;document.getElementById('earnedVal').textContent=this.value;update();
+  });
+
+  update();
+})();
+</script>
+
+<!-- HERRAMIENTAS SECTION -->
+<section class="tools-section" id="herramientas">
+  <div class="tools-header">
+    <div class="section-eyebrow">Herramientas incluidas</div>
+    <h2>Todo lo que necesitas<br>para fidelizar.</h2>
+    <p style="font-size:.98rem;color:var(--muted);line-height:1.7;margin-top:.8rem;max-width:480px">Sin costos adicionales. Todo incluido desde el primer día — y con estrategia incluida.</p>
+  </div>
+
+  <div class="tools-inner">
+
+    <!-- LEFT: tabs -->
+    <div class="tools-tabs">
+
+      <button class="ttab active" data-tool="push">
+        <div class="ttab-icon">🔔</div>
+        <div class="ttab-text">
+          <div class="ttab-name">Push Notifications</div>
+          <div class="ttab-sub">Llega directo a la pantalla de tu cliente</div>
+        </div>
+      </button>
+
+      <button class="ttab" data-tool="geo">
+        <div class="ttab-icon">📍</div>
+        <div class="ttab-text">
+          <div class="ttab-name">Geopush Automático</div>
+          <div class="ttab-sub">Notificación cuando están a metros de ti</div>
+        </div>
+      </button>
+
+      <button class="ttab" data-tool="crm">
+        <div class="ttab-icon">👥</div>
+        <div class="ttab-text">
+          <div class="ttab-name">CRM de Clientes</div>
+          <div class="ttab-sub">Perfiles, historial y datos reales</div>
+        </div>
+      </button>
+
+      <button class="ttab" data-tool="seg">
+        <div class="ttab-icon">🤖</div>
+        <div class="ttab-text">
+          <div class="ttab-name">Segmentación Automática</div>
+          <div class="ttab-sub">La oferta correcta para cada grupo</div>
+        </div>
+      </button>
+
+      <button class="ttab" data-tool="ref">
+        <div class="ttab-icon">🔗</div>
+        <div class="ttab-text">
+          <div class="ttab-name">Programa de Referidos</div>
+          <div class="ttab-sub">Tus clientes traen más clientes</div>
+        </div>
+      </button>
+
+      <button class="ttab" data-tool="analytics">
+        <div class="ttab-icon">📊</div>
+        <div class="ttab-text">
+          <div class="ttab-name">Analítica y Reportes</div>
+          <div class="ttab-sub">ROI y métricas en tiempo real</div>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- RIGHT: panels -->
+    <div class="tools-panel-wrap">
+
+      <!-- PUSH -->
+      <div class="tool-panel active" id="tp-push">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-push">
+            <div class="vp-notif">
+              <div class="vp-app">⭐</div>
+              <div class="vp-text"><p>¡Hoy 2x sellos en tu pedido! Solo hasta las 8pm 🎁</p><small>D'Marito Food · ahora</small></div>
+              <div class="vp-rate">✓ leído</div>
+            </div>
+            <div class="vp-notif">
+              <div class="vp-app">🧋</div>
+              <div class="vp-text"><p>¡Tu bubble tea gratis te espera! Válido hoy 🎉</p><small>Ocha Bubble Tea · hace 2 min</small></div>
+              <div class="vp-rate">✓ leído</div>
+            </div>
+            <div class="vp-notif">
+              <div class="vp-app">☕</div>
+              <div class="vp-text"><p>Buenos días ☀️ 10% en tu primer café de hoy</p><small>Café Fulanos · hace 5 min</small></div>
+              <div class="vp-rate">✓ leído</div>
+            </div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">Push Notifications</div>
+          <div class="tp-title">90% de tasa de apertura</div>
+          <div class="tp-desc">Envía promociones, recordatorios y ofertas directas a la pantalla principal del celular de tu cliente — sin algoritmos, sin intermediarios.</div>
+          <div class="tp-stat">🔔 90% tasa de apertura vs 2% en redes sociales</div>
+        </div>
+      </div>
+
+      <!-- GEO -->
+      <div class="tool-panel" id="tp-geo">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-geo">
+            <div class="geo-map">
+              <div class="geo-grid"></div>
+              <div class="geo-ring-1"></div>
+              <div class="geo-ring-2"></div>
+              <div class="geo-ring-3"></div>
+              <div class="geo-center-dot"></div>
+              <div class="geo-client" style="top:30%;left:65%"></div>
+              <div class="geo-client" style="top:60%;left:35%;opacity:.5"></div>
+            </div>
+            <div class="geo-notif-mini">📍 Cliente a 80m — push enviado automáticamente</div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">Geopush Automático</div>
+          <div class="tp-title">El recordatorio en el momento exacto</div>
+          <div class="tp-desc">Tu cliente recibe una notificación automática cuando está a metros de tu negocio. Sin que tú hagas nada — el sistema lo detecta y actúa solo.</div>
+          <div class="tp-stat">📍 Activa cuando el cliente está a 50-500m</div>
+        </div>
+      </div>
+
+      <!-- CRM -->
+      <div class="tool-panel" id="tp-crm">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-crm">
+            <div class="crm-header">
+              <div class="crm-title">Clientes</div>
+              <div class="crm-count">142 activos</div>
+            </div>
+            <div class="crm-row">
+              <div class="crm-avatar" style="background:rgba(212,247,107,.15);color:var(--lime)">MG</div>
+              <div class="crm-info"><div class="crm-name">María García</div><div class="crm-visits">24 visitas · última: hoy</div></div>
+              <div class="crm-badge badge-champ">Campeón</div>
+            </div>
+            <div class="crm-row">
+              <div class="crm-avatar" style="background:rgba(80,160,255,.12);color:#5fa3ff">JR</div>
+              <div class="crm-info"><div class="crm-name">Juan Ramírez</div><div class="crm-visits">12 visitas · última: hace 3 días</div></div>
+              <div class="crm-badge badge-loyal">Leal</div>
+            </div>
+            <div class="crm-row">
+              <div class="crm-avatar" style="background:rgba(255,160,60,.1);color:#ffa03c">AL</div>
+              <div class="crm-info"><div class="crm-name">Ana López</div><div class="crm-visits">5 visitas · última: hace 18 días</div></div>
+              <div class="crm-badge badge-risk">En riesgo</div>
+            </div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">CRM de Clientes</div>
+          <div class="tp-title">Finalmente sabes quiénes son</div>
+          <div class="tp-desc">Perfiles completos con nombre, contacto, historial de visitas y comportamiento de compra. Exporta tu base de datos cuando quieras.</div>
+          <div class="tp-stat">👥 Datos reales de cada cliente, en tiempo real</div>
+        </div>
+      </div>
+
+      <!-- SEGMENTACION -->
+      <div class="tool-panel" id="tp-seg">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-seg">
+            <div class="seg-row">
+              <div class="seg-label" style="color:var(--lime)">🏆 Campeones</div>
+              <div class="seg-bar-wrap"><div class="seg-bar" style="width:35%;background:var(--lime)"></div></div>
+              <div class="seg-num">35%</div>
+            </div>
+            <div class="seg-row">
+              <div class="seg-label" style="color:#5fa3ff">💙 Leales</div>
+              <div class="seg-bar-wrap"><div class="seg-bar" style="width:28%;background:#5fa3ff"></div></div>
+              <div class="seg-num">28%</div>
+            </div>
+            <div class="seg-row">
+              <div class="seg-label" style="color:#ffa03c">⚠️ En riesgo</div>
+              <div class="seg-bar-wrap"><div class="seg-bar" style="width:22%;background:#ffa03c"></div></div>
+              <div class="seg-num">22%</div>
+            </div>
+            <div class="seg-row">
+              <div class="seg-label" style="color:rgba(255,255,255,.3)">😴 Dormidos</div>
+              <div class="seg-bar-wrap"><div class="seg-bar" style="width:15%;background:rgba(255,255,255,.2)"></div></div>
+              <div class="seg-num">15%</div>
+            </div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">Segmentación Automática</div>
+          <div class="tp-title">La oferta correcta para cada grupo</div>
+          <div class="tp-desc">Vuelvo clasifica automáticamente tus clientes: campeones, leales, en riesgo y dormidos. Envía la campaña correcta a cada segmento sin configurar nada.</div>
+          <div class="tp-stat">🤖 Segmentación automática basada en comportamiento</div>
+        </div>
+      </div>
+
+      <!-- REFERIDOS -->
+      <div class="tool-panel" id="tp-ref">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-ref">
+            <div class="ref-chain">
+              <div class="ref-node origin">😊</div>
+              <div class="ref-arrow">→</div>
+              <div class="ref-node new">👤</div>
+              <div class="ref-arrow">→</div>
+              <div class="ref-node new">👤</div>
+              <div class="ref-arrow">→</div>
+              <div class="ref-node new">👤</div>
+            </div>
+            <div class="ref-reward">🎁 Tu cliente gana <span>1 sello gratis</span> · Su amigo también</div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">Programa de Referidos</div>
+          <div class="tp-title">Marketing de boca en boca, medible</div>
+          <div class="tp-desc">Tus clientes comparten un link con sus amigos. El amigo visita, ambos reciben recompensas. Tú ves exactamente cuántos clientes nuevos llegaron por referido.</div>
+          <div class="tp-stat">🔗 Cada referido es trazable y medible</div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="tool-panel" id="tp-analytics">
+        <div class="tp-visual">
+          <div class="tp-glow"></div>
+          <div class="vis-analytics">
+            <div class="an-cards">
+              <div class="an-card"><span>+57%</span><small>Retorno</small></div>
+              <div class="an-card"><span>142</span><small>Activos</small></div>
+              <div class="an-card"><span>$8.4k</span><small>Revenue</small></div>
+            </div>
+            <div class="an-chart">
+              <div class="an-bar" style="height:40%"></div>
+              <div class="an-bar" style="height:55%"></div>
+              <div class="an-bar" style="height:45%"></div>
+              <div class="an-bar hi" style="height:75%"></div>
+              <div class="an-bar" style="height:60%"></div>
+              <div class="an-bar hi" style="height:85%"></div>
+              <div class="an-bar hi" style="height:90%"></div>
+              <div class="an-bar" style="height:70%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tp-body">
+          <div class="tp-tag">Analítica y Reportes</div>
+          <div class="tp-title">Sabes exactamente qué funciona</div>
+          <div class="tp-desc">Panel completo con visitas, clientes nuevos vs recurrentes, campañas enviadas, tasa de canje y ROI del programa. Datos en tiempo real, siempre.</div>
+          <div class="tp-stat">📊 ROI visible desde el primer mes</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.ttab');
+  var panels = document.querySelectorAll('.tool-panel');
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      var p = document.getElementById('tp-' + t.dataset.tool);
+      if(p) p.classList.add('active');
+    });
+  });
+})();
+</script>
+
+
+<!-- PRICING SECTION -->
+<section class="pricing-section" id="precios">
+  <div class="pricing-header">
+    <div class="section-eyebrow" style="display:inline-flex;margin-bottom:1rem">Planes y precios</div>
+    <h2>Empieza hoy.<br>Ve resultados este mes.</h2>
+    <p style="font-size:.98rem;color:var(--muted);line-height:1.7;margin-top:.8rem">Sin contratos. Cancela cuando quieras.</p>
+  </div>
+
+  <div style="text-align:center">
+    <div class="billing-toggle">
+      <button class="btab active" data-billing="monthly">Mensual</button>
+      <button class="btab" data-billing="annual">Anual <span class="save-badge">2 meses gratis</span></button>
+    </div>
+  </div>
+
+  <div class="pricing-grid">
+
+    <!-- EMPRENDEDOR -->
+    <div class="pcard">
+      <div class="pc-head">
+        <div class="pc-plan">Emprendedor</div>
+        <div class="pc-price-wrap">
+          <span class="pc-currency">$</span>
+          <span class="pc-price" data-monthly="30" data-annual="25">30</span>
+        </div>
+        <div class="pc-period">por mes</div>
+        <div class="pc-annual-note" id="note-emp">$300/año — ahorras $60</div>
+        <div class="pc-setup">
+          <div class="setup-dot"></div>
+          Setup $97 <em style="color:var(--lime);font-style:normal;font-size:.68rem">opcional</em>
+          <div class="setup-tooltip">Puedes configurarlo tú mismo<br>o dejar que lo hagamos por ti por $97</div>
+        </div>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-features">
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>1 tarjeta activa<span class="feat-info" data-tip="1 tipo de programa de lealtad activo al mismo tiempo">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>1 ubicación geopush<span class="feat-info" data-tip="Notificación automática cuando tu cliente está a 100m de tu sucursal">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>1 usuario escáner<span class="feat-info" data-tip="1 usuario con acceso para escanear y gestionar el programa">i</span></span>
+        </div>
+        </div>
+        <div class="pc-includes-label">Incluido en todos los planes</div>
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Clientes ilimitados</span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Apple Wallet y Google Wallet<span class="feat-info" data-tip="Tus clientes guardan la tarjeta en su Wallet sin descargar nada">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Push ilimitadas y gratuitas<span class="feat-info" data-tip="Envía mensajes directos a todos tus clientes sin costo extra">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Programa de referidos<span class="feat-info" data-tip="Tus clientes invitan amigos y ambos reciben recompensas">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>CRM + analíticas<span class="feat-info" data-tip="Perfil de cada cliente con historial de visitas y métricas">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Soporte por WhatsApp<span class="feat-info" data-tip="Persona real, no bot">i</span></span>
+        </div>
+        </div>
+      </div>
+      <div class="pc-cta-wrap">
+        <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-plan-cta">Empezar →</a>
+      </div>
+    </div>
+
+    <!-- PRO -->
+    <div class="pcard featured">
+      <div class="popular-badge">⭐ Más popular</div>
+      <div class="pc-head">
+        <div class="pc-plan">Pro</div>
+        <div class="pc-price-wrap">
+          <span class="pc-currency">$</span>
+          <span class="pc-price" data-monthly="60" data-annual="50">60</span>
+        </div>
+        <div class="pc-period">por mes</div>
+        <div class="pc-annual-note" id="note-pro">$600/año — ahorras $120</div>
+        <div class="pc-setup">
+          <div class="setup-dot"></div>
+          Setup $147
+          <div class="setup-tooltip">Incluye diseño, configuración completa<br>y onboarding guiado de tu programa</div>
+        </div>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-features">
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>3 tarjetas activas<span class="feat-info" data-tip="3 programas de lealtad corriendo al mismo tiempo">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>3 ubicaciones geopush<span class="feat-info" data-tip="Geopush activo en hasta 3 sucursales">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>10 usuarios escáner<span class="feat-info" data-tip="10 usuarios con acceso al panel de gestión">i</span></span>
+        </div>
+        </div>
+        <div class="pc-includes-label">Todo lo del plan Emprendedor, más</div>
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>RFM automático<span class="feat-info" data-tip="Clasifica clientes por Recencia, Frecuencia y Monto de compra automáticamente">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Automatización de cumpleaños<span class="feat-info" data-tip="Push automático el día del cumpleaños de tu cliente">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Segmentación automática<span class="feat-info" data-tip="Campeones, leales, en riesgo y dormidos — sin configurar nada">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Campañas de reactivación<span class="feat-info" data-tip="Mensajes automáticos para clientes que no han visitado en X días">i</span></span>
+        </div>
+        </div>
+      </div>
+      <div class="pc-cta-wrap">
+        <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-plan-cta">Agendar demo →</a>
+      </div>
+    </div>
+
+    <!-- ELITE -->
+    <div class="pcard">
+      <div class="pc-head">
+        <div class="pc-plan">Elite</div>
+        <div class="pc-price-wrap">
+          <span class="pc-currency">$</span>
+          <span class="pc-price" data-monthly="120" data-annual="100">120</span>
+        </div>
+        <div class="pc-period">por mes</div>
+        <div class="pc-annual-note" id="note-elite">$1,200/año — ahorras $240</div>
+        <div class="pc-setup">
+          <div class="setup-dot"></div>
+          Setup $197
+          <div class="setup-tooltip">Setup completo con estrategia dedicada<br>e integración de todas las herramientas</div>
+        </div>
+      </div>
+      <div class="pc-divider"></div>
+      <div class="pc-features">
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>10 tarjetas activas<span class="feat-info" data-tip="10 programas de lealtad corriendo al mismo tiempo">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>10 ubicaciones geopush<span class="feat-info" data-tip="Geopush en hasta 10 sucursales o puntos de venta">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>50 usuarios escáner<span class="feat-info" data-tip="Ideal para cadenas con múltiples puntos de venta y equipos grandes">i</span></span>
+        </div>
+        </div>
+        <div class="pc-includes-label">Todo lo del plan Pro, más</div>
+        <div class="pc-highlights">
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Acceso API completo<span class="feat-info" data-tip="Integración con tu software de caja o POS — implementación $100 adicional">i</span></span>
+        </div>
+        <div class="pc-feat">
+          <div class="pc-feat-check">✓</div>
+          <span>Webhooks personalizados<span class="feat-info" data-tip="Automatiza acciones externas cuando ocurren eventos en tu programa">i</span></span>
+        </div>
+        </div>
+      </div>
+      <div class="pc-cta-wrap">
+        <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-plan-cta">Empezar →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  var btabs = document.querySelectorAll('.btab');
+  var prices = document.querySelectorAll('.pc-price');
+  var notes = ['note-emp','note-pro','note-elite'];
+  var annualTexts = ['$300/año — ahorras $60','$600/año — ahorras $120','$1,200/año — ahorras $240'];
+
+  btabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      btabs.forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      var isAnnual = t.dataset.billing === 'annual';
+      prices.forEach(function(p){
+        p.textContent = isAnnual ? p.dataset.annual : p.dataset.monthly;
+      });
+      notes.forEach(function(id, i){
+        var el = document.getElementById(id);
+        if(el) el.classList.toggle('visible', isAnnual);
+      });
+      document.querySelectorAll('.pc-period').forEach(function(p){
+        p.textContent = isAnnual ? 'por mes, facturado anualmente' : 'por mes';
+      });
+    });
+  });
+})();
+</script>
+
+
+<!-- FAQ SECTION -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+
+    <div class="faq-left">
+      <div class="section-eyebrow">Preguntas frecuentes</div>
+      <h2>Todo lo que necesitas saber.</h2>
+      <p>¿No encuentras tu respuesta? Escríbenos directamente por WhatsApp.</p>
+      <a href="https://wa.me/50370247995" target="_blank" class="faq-contact">
+        💬 Escribir por WhatsApp
+      </a>
+    </div>
+
+    <div class="faq-list">
+      
+      <div class="faq-item" id="faq-0">
+        <button class="faq-q" data-faq="0">
+          ¿Qué es Vuelvo y cómo funciona?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Vuelvo es una plataforma de tarjetas de lealtad digital para negocios. Creas tarjetas personalizadas (sellos, puntos, cashback, membresías, etc.) que tus clientes guardan en Apple Wallet o Google Wallet. Compartes un código QR o link, el cliente agrega la tarjeta en segundos, y tú le das recompensas usando nuestra app escáner. Sin descargas adicionales — todo funciona a través de la billetera digital que ya viene en su teléfono.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-1">
+        <button class="faq-q" data-faq="1">
+          ¿Mis clientes tienen que descargar una aplicación?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">No. Tus clientes no descargan ninguna app adicional. Escanean el QR y la tarjeta se instala directo en Apple Wallet o Google Wallet, que ya vienen preinstalados en todos los smartphones. El proceso completo toma menos de 30 segundos.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-2">
+        <button class="faq-q" data-faq="2">
+          ¿Cómo le doy sellos o puntos a mis clientes?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Tienes dos opciones: (1) Usa nuestra app escáner gratuita en cualquier smartphone o tablet para escanear la tarjeta del cliente en caja — toma 2 segundos. (2) Da sellos de forma remota desde tu panel si el cliente ordena en línea o por delivery. Ambas opciones actualizan la tarjeta del cliente en tiempo real.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-3">
+        <button class="faq-q" data-faq="3">
+          ¿Los datos de mis clientes están seguros?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí. Los datos de tus clientes son 100% tuyos — Vuelvo nunca los vende ni comparte con terceros. El sistema solicita consentimiento explícito al cliente en el momento del registro. Los pagos se procesan de forma segura bajo estándares PCI DSS.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-4">
+        <button class="faq-q" data-faq="4">
+          ¿Las tarjetas digitales son mejores que las tarjetas de papel?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí, y por mucho. Las tarjetas digitales tienen ventajas claras: los clientes no pueden perderlas ni olvidarlas (siempre están en su teléfono), eliminas el gasto en impresión, puedes enviar push notifications para generar visitas recurrentes, y obtienes datos reales sobre el comportamiento de tus clientes. Las tarjetas digitales también son contactless, amigables con el medio ambiente, y tienen 3-5x más engagement que las de papel.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-5">
+        <button class="faq-q" data-faq="5">
+          ¿Cuántos clientes pueden tener la tarjeta?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Ilimitados en todos los planes. No hay ningún tope de clientes. La única limitación es que antes de activar la tarjeta se puede instalar máximo 10 veces para pruebas internas. Una vez activada, los clientes son completamente ilimitados.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-6">
+        <button class="faq-q" data-faq="6">
+          ¿Puedo usar Vuelvo en múltiples sucursales?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí. Los planes Pro y Elite soportan 3 y 10 ubicaciones respectivamente. Tus clientes pueden usar la misma tarjeta en todas tus sucursales, con puntos y sellos sincronizados automáticamente. Puedes ver el rendimiento por sucursal, enviar ofertas específicas por ubicación, y administrar todo desde un solo panel.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-7">
+        <button class="faq-q" data-faq="7">
+          ¿Puedo enviarles mensajes y ofertas a mis clientes?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí. Vuelvo incluye push notifications que aparecen directamente en el teléfono de tus clientes — incluso en la pantalla de bloqueo en iPhone. Envía ofertas, recompensas de cumpleaños, recordatorios de puntos, o reactiva clientes que no han visitado. Puedes enviar a todos o segmentar por comportamiento (ej: solo clientes VIP).</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-8">
+        <button class="faq-q" data-faq="8">
+          ¿Tengo que pagar por las actualizaciones?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">No. Vuelvo está en la nube — todas las actualizaciones, nuevas funcionalidades y mejoras se aplican automáticamente en tu cuenta sin costo adicional. Siempre tendrás la versión más reciente sin hacer nada.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-9">
+        <button class="faq-q" data-faq="9">
+          ¿Puedo cambiar el diseño de la tarjeta después de activarla?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí. Logo, colores, imágenes y mensajes de notificación se editan en cualquier momento y los cambios se aplican automáticamente en todos los celulares de tus clientes. Lo que no cambia una vez activa es el tipo de tarjeta (sellos, cashback, etc.) y la cantidad de sellos requeridos.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-10">
+        <button class="faq-q" data-faq="10">
+          ¿Cómo funciona el geopush? ¿Es automático?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">Sí, es 100% automático. Cuando un cliente con tu tarjeta instalada se acerca a menos de 100 metros de tu negocio, recibe una notificación push automáticamente — sin que tú hagas nada. Puedes configurar hasta 10 ubicaciones distintas según tu plan, ideal para negocios con múltiples sucursales.</div>
+        </div>
+      </div>
+      <div class="faq-item" id="faq-11">
+        <button class="faq-q" data-faq="11">
+          ¿Necesito instalar hardware especial en mi local?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">
+          <div class="faq-a-inner">No se requiere ningún hardware especial. El sistema funciona con códigos QR que tus clientes escanean con su teléfono. Puedes imprimirlos, mostrarlos en una pantalla, o compartirlos digitalmente por redes sociales o WhatsApp.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = document.getElementById('faq-' + btn.dataset.faq);
+      var isOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('.faq-item').forEach(function(x){ x.classList.remove('open'); });
+      // open clicked if it was closed
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+})();
+</script>
+
+
+<!-- CTA SECTION -->
+<section class="cta-section" id="demo">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <div class="section-eyebrow" style="justify-content:center;margin-bottom:1.5rem">Empieza hoy</div>
+    <h2>Tu negocio merece<br>clientes que <em>regresen.</em></h2>
+    <p>Agenda una demo gratuita de 20 minutos y te mostramos exactamente cómo funcionaría Vuelvo en tu negocio — sin compromiso.</p>
+    <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-cta-main">
+      Agenda tu demo gratis
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <div class="cta-note">
+      <span>✦ Gratis</span>
+      <div class="cta-dot"></div>
+      <span>✦ Sin compromiso</span>
+      <div class="cta-dot"></div>
+      <span>✦ Respuesta en menos de 24 horas</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-top">
+
+    <!-- Brand -->
+    <div class="footer-brand">
+      <img src="https://vuelvocards.com/wp-content/uploads/2026/06/Logo-Vuelvo_Logo-blanco-scaled.png" alt="Vuelvo" class="footer-logo-img">
+      <p class="footer-tagline">Software de fidelización para negocios locales en El Salvador y LATAM. Clientes que regresan, siempre.</p>
+      <div class="footer-contact">
+        <a href="mailto:info@vuelvocards.com">✉ info@vuelvocards.com</a>
+        <a href="https://wa.me/50370247995" target="_blank">💬 WhatsApp +503 7024 7995</a>
+      </div>
+      <div class="footer-socials">
+        <a href="https://instagram.com/vuelvocards" target="_blank" class="fsocial" aria-label="Instagram">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://tiktok.com/vuelvocards" target="_blank" class="fsocial" aria-label="TikTok">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+        </a>
+      </div>
+      <div class="footer-wallets">
+        <a href="https://app.vuelvocards.com" target="_blank" class="wallet-badge">
+          <span style="font-size:1rem">🍎</span>
+          <div><span>Add to</span><strong>Apple Wallet</strong></div>
+        </a>
+        <a href="https://app.vuelvocards.com" target="_blank" class="wallet-badge">
+          <span style="font-size:1rem">🤖</span>
+          <div><span>Add to</span><strong>Google Wallet</strong></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Producto -->
+    <div class="footer-col">
+      <h4>Producto</h4>
+      <ul>
+        <li><a href="https://app.vuelvocards.com" target="_blank">Digital Cards</a></li>
+        <li><a href="https://app.vuelvocards.com/scanner-app" target="_blank">Scanner App</a></li>
+        <li><a href="#tarjetas">Tipos de tarjeta</a></li>
+        <li><a href="#herramientas">Herramientas</a></li>
+        <li><a href="#personaliza">Personalización</a></li>
+      </ul>
+    </div>
+
+    <!-- Empresa -->
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#diferencia">Sobre Vuelvo</a></li>
+        <li><a href="#como">Cómo funciona</a></li>
+        <li><a href="#precios">Precios</a></li>
+        <li><a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank">Agendar demo</a></li>
+      </ul>
+    </div>
+
+    <!-- Soporte -->
+    <div class="footer-col">
+      <h4>Soporte</h4>
+      <ul>
+        <li><a href="https://wa.me/50370247995" target="_blank">Contacto</a></li>
+        <li><a href="#faq">Preguntas frecuentes</a></li>
+        <li><a href="https://app.vuelvocards.com" target="_blank">Acceder a mi cuenta</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Vuelvo Cards. Todos los derechos reservados.</div>
+    <div class="footer-legal">
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
