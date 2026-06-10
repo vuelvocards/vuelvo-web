@@ -809,7 +809,8 @@ h1.dynamic-h1 .cycling-wrap{
   position:relative;
   overflow:hidden;
   display:flex;align-items:center;justify-content:center;
-  padding:1rem;
+  padding:1rem!important;
+  box-sizing:border-box;
 }
 
 /* wallet preview inside card */
@@ -3137,7 +3138,7 @@ setInterval(cycleWord, 2200);
 </section>
 
 <script>
-// Problem cards — hover 1s delay to reveal solution, leave to reset
+// Problem cards — hover (desktop) + tap (mobile)
 (function(){
   document.querySelectorAll('.pcard').forEach(function(card){
     var stage = card.querySelector('.pstage');
@@ -3145,22 +3146,32 @@ setInterval(cycleWord, 2200);
     var timer = null;
     var isAfter = false;
 
-    card.addEventListener('mouseenter', function(){
-    card.addEventListener('touchstart', function(){
-      timer = setTimeout(function(){
-        isAfter = true;
-        stage.classList.add('flipped');
-        card.classList.add('flipped');
-        label.textContent = 'Solución Vuelvo';
-      }, 900);
-    });
-
-    card.addEventListener('mouseleave', function(){
+    function showAfter(){
+      isAfter = true;
+      stage.classList.add('flipped');
+      card.classList.add('flipped');
+      label.textContent = 'Solución Vuelvo';
+    }
+    function showBefore(){
       clearTimeout(timer);
       isAfter = false;
       stage.classList.remove('flipped');
       card.classList.remove('flipped');
       label.textContent = 'Problema actual';
+    }
+
+    // Desktop hover
+    card.addEventListener('mouseenter', function(){
+      timer = setTimeout(showAfter, 900);
+    });
+    card.addEventListener('mouseleave', function(){
+      showBefore();
+    });
+
+    // Mobile tap toggle
+    card.addEventListener('touchend', function(e){
+      e.preventDefault();
+      isAfter ? showBefore() : showAfter();
     });
   });
 })();
