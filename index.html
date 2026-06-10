@@ -798,6 +798,9 @@ h1.dynamic-h1 .cycling-wrap{
   display:flex;
   flex-direction:column;
 }
+.tcard-visual{
+  border-bottom:1px solid var(--border);
+}
 .tcard:hover{
   border-color:rgba(212,247,107,.25);
   transform:translateY(-4px);
@@ -805,18 +808,20 @@ h1.dynamic-h1 .cycling-wrap{
 
 /* card visual top */
 .tcard-visual{
-  height:160px;
+  height:180px;
   position:relative;
   display:flex;align-items:center;justify-content:center;
-  padding:1rem;
+  padding:16px;
   box-sizing:border-box;
   background:var(--black);
+  border-radius:12px 12px 0 0;
 }
 
 /* wallet preview inside card */
 .tw-card{
   width:100%;
   max-width:200px;
+  margin:8px auto 0;
   background:linear-gradient(150deg,#0c1a3a 0%,#070d1e 100%);
   border:1px solid rgba(212,247,107,.15);
   border-radius:14px;
