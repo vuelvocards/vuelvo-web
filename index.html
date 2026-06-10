@@ -809,6 +809,7 @@ h1.dynamic-h1 .cycling-wrap{
   position:relative;
   overflow:hidden;
   display:flex;align-items:center;justify-content:center;
+  padding:1rem;
 }
 
 /* wallet preview inside card */
@@ -1954,7 +1955,8 @@ h1.dynamic-h1 .cycling-wrap{
   cursor:pointer;border:none;background:transparent;
   transition:all .2s;font-family:'Inter',sans-serif;
 }
-.btab.active{background:var(--lime);color:#080808}
+.btab.active{background:var(--lime);color:#080808;font-weight:700}
+.btab.active .save-badge{background:rgba(0,0,0,.15);border-color:rgba(0,0,0,.2);color:#080808}
 .save-badge{
   display:inline-flex;align-items:center;
   background:rgba(212,247,107,.1);border:1px solid rgba(212,247,107,.2);
@@ -2316,7 +2318,7 @@ h1.dynamic-h1 .cycling-wrap{
 /* nav columns */
 .footer-col h4{
   font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(255,255,255,.25);margin-bottom:1.2rem;
+  color:rgba(255,255,255,.6);margin-bottom:1.2rem;
 }
 .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.65rem}
 .footer-col ul a{
@@ -2355,6 +2357,66 @@ h1.dynamic-h1 .cycling-wrap{
 }
 @media(max-width:560px){
   .footer-top{grid-template-columns:1fr}
+}
+
+
+/* ── HAMBURGER MENU ── */
+.nav-hamburger{
+  display:none;
+  flex-direction:column;gap:5px;cursor:pointer;
+  background:none;border:none;padding:4px;
+}
+.nav-hamburger span{
+  display:block;width:22px;height:2px;
+  background:var(--white);border-radius:2px;
+  transition:all .3s;
+}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.nav-mobile-menu{
+  display:none;
+  position:fixed;top:64px;left:0;right:0;
+  background:rgba(8,8,8,.97);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:1.5rem 5vw 2rem;
+  flex-direction:column;gap:.2rem;
+  z-index:199;
+  animation:menuDrop .25s ease;
+}
+@keyframes menuDrop{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.nav-mobile-menu.open{display:flex}
+.nav-mobile-menu a{
+  color:rgba(255,255,255,.6);text-decoration:none;
+  font-size:1rem;font-weight:500;padding:.8rem 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:color .2s;
+}
+.nav-mobile-menu a:hover{color:var(--white)}
+.nav-mobile-menu .btn-nav-cta{
+  margin-top:.8rem;text-align:center;
+  justify-content:center;border-radius:10px;
+  padding:.85rem;font-size:.95rem;
+}
+
+
+@media(max-width:900px){
+  .tools-inner{grid-template-columns:1fr}
+  .tools-panel-wrap{position:relative;top:auto}
+  .tools-tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.5rem;
+  }
+  .ttab{padding:.8rem 1rem}
+  .ttab-sub{display:none}
+  .tool-panel{margin-top:1rem}
+  .tp-visual{height:180px}
 }
 
 /* RESPONSIVE */
@@ -2408,6 +2470,7 @@ h1.dynamic-h1 .cycling-wrap{
   .hero-right{display:none}
   .hero-stats{justify-content:center}
   nav ul{display:none}
+  .nav-hamburger{display:flex}
   .hero-left > *{--tx:0}
   .prob-grid{grid-template-columns:1fr}
 
@@ -2659,7 +2722,20 @@ html, body {
     <li><a href="#faq">FAQ</a></li>
     <li><a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-nav-cta">Agenda tu demo gratis &rarr;</a></li>
   </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Mobile menu -->
+<div class="nav-mobile-menu" id="navMobile">
+  <a href="#como" onclick="closeMobileMenu()">Cómo funciona</a>
+  <a href="#tarjetas" onclick="closeMobileMenu()">Tarjetas</a>
+  <a href="#herramientas" onclick="closeMobileMenu()">Herramientas</a>
+  <a href="#precios" onclick="closeMobileMenu()">Precios</a>
+  <a href="#faq" onclick="closeMobileMenu()">FAQ</a>
+  <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-nav-cta">Agenda tu demo gratis →</a>
+</div>
 
 <section class="hero">
   <div class="hero-glow"></div>
@@ -3070,6 +3146,7 @@ setInterval(cycleWord, 2200);
     var isAfter = false;
 
     card.addEventListener('mouseenter', function(){
+    card.addEventListener('touchstart', function(){
       timer = setTimeout(function(){
         isAfter = true;
         stage.classList.add('flipped');
@@ -4588,7 +4665,7 @@ setInterval(cycleWord, 2200);
   </div>
 
   <div class="footer-bottom">
-    <div class="footer-copy">© 2025 Vuelvo Cards. Todos los derechos reservados.</div>
+    <div class="footer-copy">© <span id="footerYear">2025</span> Vuelvo Cards. Todos los derechos reservados.</div>
     <div class="footer-legal">
       <a href="#">Privacidad</a>
       <a href="#">Términos</a>
@@ -4596,5 +4673,24 @@ setInterval(cycleWord, 2200);
   </div>
 </footer>
 
+<script>
+// Dynamic year
+var yearEl = document.getElementById('footerYear');
+if(yearEl) yearEl.textContent = new Date().getFullYear();
+
+// Hamburger menu
+var hamburger = document.getElementById('navHamburger');
+var mobileMenu = document.getElementById('navMobile');
+if(hamburger){
+  hamburger.addEventListener('click', function(){
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+}
+function closeMobileMenu(){
+  if(hamburger) hamburger.classList.remove('open');
+  if(mobileMenu) mobileMenu.classList.remove('open');
+}
+</script>
 </body>
 </html>
