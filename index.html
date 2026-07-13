@@ -465,6 +465,7 @@ nav.scrolled{border-bottom-color:var(--border);box-shadow:0 2px 20px rgba(13,44,
   padding:.8rem 1rem;font-size:.9rem;color:var(--ink);font-family:var(--font-body);
 }
 .pfield input[type=text]:focus{outline:none;border-color:var(--navy)}
+.color-fields-row{display:contents}
 .color-row{display:flex;gap:.7rem;align-items:center}
 .color-swatch{width:44px;height:44px;border-radius:12px;border:1px solid var(--border-strong);position:relative;overflow:hidden;flex-shrink:0}
 .color-swatch input[type=color]{position:absolute;inset:-8px;width:60px;height:60px;cursor:pointer;opacity:0}
@@ -550,7 +551,8 @@ input[type=range]{width:100%;accent-color:var(--navy)}
 .ttab-sub{font-size:.74rem;color:var(--slate);margin-top:2px}
 .tools-panel-wrap{position:sticky;top:100px}
 .tool-panel{display:none;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:#fff;box-shadow:var(--shadow-sm)}
-.tool-panel.active{display:block}
+.tool-panel.active{display:block;animation:panelIn .35s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .tp-visual{
   min-height:290px;background:linear-gradient(150deg,var(--navy) 0%,var(--navy-deep) 75%);
   display:flex;align-items:center;justify-content:center;padding:2.2rem;position:relative;overflow:hidden;
@@ -563,7 +565,15 @@ input[type=range]{width:100%;accent-color:var(--navy)}
 .tp-stat{display:inline-flex;font-size:.78rem;font-weight:600;color:var(--lime-ink);background:var(--lime-soft);border:1px solid rgba(92,118,7,.18);border-radius:999px;padding:.45rem .95rem}
 /* tool visuals */
 .vis-push{display:flex;flex-direction:column;gap:.8rem;width:100%;max-width:380px;position:relative;z-index:2}
-.vp-notif{display:flex;gap:.7rem;align-items:flex-start;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:.75rem .9rem}
+.vp-notif{display:flex;gap:.7rem;align-items:flex-start;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:.75rem .9rem;transform:translateX(0)}
+.vp-notif:nth-child(1){animation:slideNotif 3s 0s ease infinite}
+.vp-notif:nth-child(2){animation:slideNotif 3s .4s ease infinite}
+.vp-notif:nth-child(3){animation:slideNotif 3s .8s ease infinite}
+@keyframes slideNotif{
+  0%{opacity:0;transform:translateX(20px)}
+  15%,85%{opacity:1;transform:translateX(0)}
+  100%{opacity:0;transform:translateX(-10px)}
+}
 .vp-app{width:30px;height:30px;border-radius:8px;background:var(--lime);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
 .vp-text{flex:1}
 .vp-text p{font-size:.76rem;font-weight:500;color:#fff;line-height:1.4}
@@ -573,15 +583,23 @@ input[type=range]{width:100%;accent-color:var(--navy)}
 .geo-map{width:200px;height:200px;border-radius:50%;position:relative;margin:0 auto 1rem}
 .geo-grid{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.04) 0 6deg,transparent 6deg 12deg)}
 .geo-ring-1,.geo-ring-2,.geo-ring-3{position:absolute;border-radius:50%;border:1px solid rgba(212,247,107,.35)}
-.geo-ring-1{inset:22%}.geo-ring-2{inset:8%;border-color:rgba(212,247,107,.2)}.geo-ring-3{inset:-6%;border-color:rgba(212,247,107,.1)}
-.geo-center-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 7px rgba(212,247,107,.2)}
+.geo-ring-1{inset:22%;animation:geoRing 2s ease-in-out infinite}
+.geo-ring-2{inset:8%;border-color:rgba(212,247,107,.2);animation:geoRing 2s .3s ease-in-out infinite}
+.geo-ring-3{inset:-6%;border-color:rgba(212,247,107,.1);animation:geoRing 2s .6s ease-in-out infinite}
+@keyframes geoRing{0%,100%{opacity:.3;transform:scale(.95)}50%{opacity:.7;transform:scale(1)}}
+.geo-center-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 7px rgba(212,247,107,.2);animation:geoPulse 1.5s ease infinite}
+@keyframes geoPulse{0%,100%{box-shadow:0 0 8px rgba(212,247,107,.5),0 0 0 7px rgba(212,247,107,.2)}50%{box-shadow:0 0 18px rgba(212,247,107,.8),0 0 0 9px rgba(212,247,107,.15)}}
 .geo-client{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.2)}
 .geo-notif-mini{display:inline-flex;font-size:.72rem;font-weight:600;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:.45rem 1rem}
 .vis-crm{width:100%;max-width:380px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:1rem;position:relative;z-index:2}
 .crm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem}
 .crm-title{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:#fff}
 .crm-count{font-size:.68rem;font-weight:700;color:var(--lime)}
-.crm-row{display:flex;gap:.7rem;align-items:center;padding:.55rem 0;border-top:1px solid rgba(255,255,255,.08)}
+.crm-row{display:flex;gap:.7rem;align-items:center;padding:.55rem 0;border-top:1px solid rgba(255,255,255,.08);opacity:0;animation:rowIn .45s ease both}
+.crm-row:nth-child(2){animation-delay:.08s}
+.crm-row:nth-child(3){animation-delay:.16s}
+.crm-row:nth-child(4){animation-delay:.24s}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .crm-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex-shrink:0}
 .crm-info{flex:1}
 .crm-name{font-size:.8rem;font-weight:600;color:#fff}
@@ -594,22 +612,40 @@ input[type=range]{width:100%;accent-color:var(--navy)}
 .seg-row{display:flex;align-items:center;gap:.8rem}
 .seg-label{font-size:.74rem;font-weight:600;width:110px;flex-shrink:0}
 .seg-bar-wrap{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.1);overflow:hidden}
-.seg-bar{height:100%;border-radius:5px}
+.seg-bar{height:100%;border-radius:5px;animation:barGrow .8s ease both}
+@keyframes barGrow{from{width:0}}
 .seg-num{font-size:.72rem;font-weight:700;color:#fff;width:34px;text-align:right}
 .vis-ref{text-align:center;position:relative;z-index:2}
 .ref-chain{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:1.2rem}
 .ref-node{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
 .ref-node.origin{background:rgba(212,247,107,.18);border-color:rgba(212,247,107,.4)}
+.ref-node.new{animation:nodeAppear .5s ease both}
+.ref-node.new:nth-of-type(5){animation-delay:.2s}
+.ref-node.new:nth-of-type(7){animation-delay:.4s}
+@keyframes nodeAppear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
 .ref-arrow{color:var(--lime);font-weight:700}
 .ref-reward{display:inline-flex;font-size:.74rem;color:rgba(255,255,255,.8);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:.5rem 1rem;gap:.3rem}
 .ref-reward span{color:var(--lime);font-weight:700}
 .vis-analytics{width:100%;max-width:380px;position:relative;z-index:2}
 .an-cards{display:flex;gap:.7rem;margin-bottom:1rem}
-.an-card{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:.6rem .7rem}
+.an-card{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:.6rem .7rem;opacity:0;animation:cardIn .4s ease both}
+.an-card:nth-child(1){animation-delay:0s}
+.an-card:nth-child(2){animation-delay:.08s}
+.an-card:nth-child(3){animation-delay:.16s}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .an-card span{display:block;font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--lime)}
 .an-card small{font-size:.6rem;color:rgba(255,255,255,.6)}
 .an-chart{display:flex;gap:6px;align-items:flex-end;height:80px;background:rgba(255,255,255,.05);border-radius:11px;padding:.7rem}
-.an-bar{flex:1;background:rgba(255,255,255,.22);border-radius:3px 3px 0 0}
+.an-bar{flex:1;background:rgba(255,255,255,.22);border-radius:3px 3px 0 0;animation:barRise .7s cubic-bezier(.2,.8,.2,1) both}
+.an-bar:nth-child(1){animation-delay:.05s}
+.an-bar:nth-child(2){animation-delay:.1s}
+.an-bar:nth-child(3){animation-delay:.15s}
+.an-bar:nth-child(4){animation-delay:.2s}
+.an-bar:nth-child(5){animation-delay:.25s}
+.an-bar:nth-child(6){animation-delay:.3s}
+.an-bar:nth-child(7){animation-delay:.35s}
+.an-bar:nth-child(8){animation-delay:.4s}
+@keyframes barRise{from{height:0}}
 .an-bar.hi{background:var(--lime)}
 
 /* ============ PRECIOS ============ */
@@ -784,19 +820,39 @@ input[type=range]{width:100%;accent-color:var(--navy)}
   .hero{grid-template-columns:1fr;padding-top:7rem;gap:3.5rem;min-height:auto;text-align:center}
   .hero-sub{margin-left:auto;margin-right:auto}
   .hero-actions,.hero-stats{justify-content:center}
+  /* fix 1: palabra ciclica centrada (position:absolute ignora text-align del padre) */
+  .cycling-word{left:50%;transform:translate(-50%,110%)}
+  .cycling-word.active{transform:translate(-50%,0)}
+  .cycling-word.exit{transform:translate(-50%,-110%)}
+  /* fix 2: ocultar float cards en mobile, tapan el mockup */
+  .float-card{display:none}
   .phone-frame{width:280px;height:560px}
-  .fc-left{left:-14px;top:10%}
-  .fc-right{right:-10px}
   .prob-grid{grid-template-columns:1fr}
+  /* fix 3 y 4: permitir que los h2 con <br> hagan wrap natural en vez de forzar el corte */
+  .sec-head h2 br{display:none}
   .how-inner{grid-template-columns:1fr}
   .how-img-wrap{min-height:280px;position:relative}
   .cards-tabs-wrap{justify-content:flex-start}
+  .cards-tabs-wrap .seg{width:max-content;max-width:none}
   .cards-panel{grid-template-columns:1fr}
   .cards-panel-left{padding:2.5rem 1.5rem}
   .tw-card{width:100%;max-width:300px}
   .cards-panel-right{padding:2.2rem 1.6rem}
   .ps-inner{grid-template-columns:1fr;gap:2.5rem}
   .ps-right{position:static}
+  /* fix 6 y 7: centrar titulos de Personalizacion y FAQ en mobile */
+  .ps-left .sec-head,.faq-left .sec-head{text-align:center;margin-left:auto;margin-right:auto}
+  .ps-left .sec-head p,.faq-left .sec-head p{margin-left:auto;margin-right:auto}
+  /* fix extra: centrar las pills de tabs (General/Imágenes/Sellos y Apple/Google) */
+  #pformSeg,#walletSeg{display:flex;width:max-content;margin:0 auto}
+  /* colores de fondo/texto lado a lado en mobile, evita espacio vacío a la derecha */
+  .color-fields-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .color-fields-row .pfield{margin:0}
+  .color-fields-row .color-row{flex-wrap:wrap}
+  .color-fields-row .color-row input[type=text]{max-width:none;flex:1;min-width:0}
+  .ps-left{text-align:center}
+  .pfield{text-align:left}
+  #pformSeg{margin:0 auto}
   .pricing-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}
   .faq-inner{grid-template-columns:1fr;gap:2.5rem}
   .faq-left{position:static}
@@ -1733,6 +1789,7 @@ setInterval(cycleWord, 2200);
           <label>Nombre del negocio</label>
           <input type="text" id="inputName" placeholder="Ej: D'Marito Food" maxlength="30">
         </div>
+        <div class="color-fields-row">
         <div class="pfield">
           <label>Color de fondo</label>
           <div class="color-row">
@@ -1750,6 +1807,7 @@ setInterval(cycleWord, 2200);
             </div>
             <input type="text" id="inputTextHex" value="#ffffff">
           </div>
+        </div>
         </div>
       </div>
 
@@ -1925,10 +1983,13 @@ setInterval(cycleWord, 2200);
   function update(){
     var nm=S.name||'Tu Negocio';
     document.getElementById('awCard').style.background=S.bg;
+    document.getElementById('awCard').style.color=S.tc;
     document.getElementById('awName').textContent=nm;
     document.getElementById('awName').style.color=S.tc;
     document.getElementById('gwCard').style.background=S.bg;
+    document.getElementById('gwCard').style.color=S.tc;
     document.getElementById('gwHead').style.background=S.bg;
+    document.getElementById('gwHead').style.color=S.tc;
     stamps();
   }
 
@@ -2112,7 +2173,7 @@ setInterval(cycleWord, 2200);
           <div class="tp-tag">Geopush Automático</div>
           <div class="tp-title">El recordatorio en el momento exacto</div>
           <div class="tp-desc">Tu cliente recibe una notificación automática cuando está a metros de tu negocio. Sin que tú hagas nada. El sistema lo detecta y actúa solo.</div>
-          <div class="tp-stat">📍 Activa cuando el cliente está a 100m</div>
+          <div class="tp-stat">📍 Activa cuando el cliente está a 50-500m</div>
         </div>
       </div>
 
@@ -2267,8 +2328,8 @@ setInterval(cycleWord, 2200);
 
   <div class="pricing-toggle-wrap">
     <div class="seg">
-      <button class="seg-btn active" data-billing="monthly">Mensual</button>
-      <button class="seg-btn" data-billing="annual">Anual <span class="save-badge">2 meses gratis</span></button>
+      <button class="seg-btn" data-billing="monthly">Mensual</button>
+      <button class="seg-btn active" data-billing="annual">Anual <span class="save-badge">2 meses gratis</span></button>
     </div>
   </div>
 
@@ -2280,10 +2341,10 @@ setInterval(cycleWord, 2200);
         <div class="pc-plan">Emprendedor</div>
         <div class="pc-price-wrap">
           <span class="pc-currency">$</span>
-          <span class="pc-price" data-monthly="30" data-annual="25">30</span>
+          <span class="pc-price" data-monthly="30" data-annual="25">25</span>
         </div>
-        <div class="pc-period">por mes</div>
-        <div class="pc-annual-note" id="note-emp">$300/año, ahorras $60</div>
+        <div class="pc-period">por mes, facturado anualmente</div>
+        <div class="pc-annual-note visible" id="note-emp">$300/año, ahorras $60</div>
         <div class="pc-setup">
           <div class="setup-dot"></div>
           Setup $97 <em>opcional</em>
@@ -2342,10 +2403,10 @@ setInterval(cycleWord, 2200);
         <div class="pc-plan">Pro</div>
         <div class="pc-price-wrap">
           <span class="pc-currency">$</span>
-          <span class="pc-price" data-monthly="60" data-annual="50">60</span>
+          <span class="pc-price" data-monthly="60" data-annual="50">50</span>
         </div>
-        <div class="pc-period">por mes</div>
-        <div class="pc-annual-note" id="note-pro">$600/año, ahorras $120</div>
+        <div class="pc-period">por mes, facturado anualmente</div>
+        <div class="pc-annual-note visible" id="note-pro">$600/año, ahorras $120</div>
         <div class="pc-setup">
           <div class="setup-dot"></div>
           Setup $147
@@ -2395,10 +2456,10 @@ setInterval(cycleWord, 2200);
         <div class="pc-plan">Elite</div>
         <div class="pc-price-wrap">
           <span class="pc-currency">$</span>
-          <span class="pc-price" data-monthly="120" data-annual="100">120</span>
+          <span class="pc-price" data-monthly="120" data-annual="100">100</span>
         </div>
-        <div class="pc-period">por mes</div>
-        <div class="pc-annual-note" id="note-elite">$1,200/año, ahorras $240</div>
+        <div class="pc-period">por mes, facturado anualmente</div>
+        <div class="pc-annual-note visible" id="note-elite">$1,200/año, ahorras $240</div>
         <div class="pc-setup">
           <div class="setup-dot"></div>
           Setup $197
@@ -2697,6 +2758,21 @@ setInterval(cycleWord, 2200);
     </div>
   </div>
 </footer>
+
+<script>
+// Pausar animaciones infinitas fuera de pantalla: scroll más liviano
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      e.target.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+    });
+  }, {rootMargin:'150px 0px'});
+  document.querySelectorAll('.float-card, .logos-track, .hero-badge-dot, .person, .push-notif').forEach(function(el){
+    io.observe(el);
+  });
+})();
+</script>
 
 <script>
 // Dynamic year
