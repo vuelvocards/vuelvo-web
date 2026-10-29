@@ -2323,7 +2323,7 @@ setInterval(cycleWord, 2200);
   <div class="sec-head">
     <div class="eyebrow"><span class="star">✦</span> Planes y precios</div>
     <h2>Empieza hoy. <br> Ve resultados <em>este mes.</em></h2>
-    <p>Sin contratos. Cancela cuando quieras. Precios no incluyen IVA.</p>
+    <p>Sin contratos. Cancela cuando quieras.</p>
   </div>
 
   <div class="pricing-toggle-wrap">
@@ -2450,20 +2450,19 @@ setInterval(cycleWord, 2200);
       </div>
     </div>
 
-    <!-- ELITE -->
-    <div class="prcard">
+    <!-- ENTERPRISE -->
+    <div class="prcard enterprise">
       <div class="pc-head">
-        <div class="pc-plan">Elite</div>
+        <div class="pc-plan">Enterprise</div>
         <div class="pc-price-wrap">
-          <span class="pc-currency">$</span>
-          <span class="pc-price" data-monthly="120" data-annual="100">100</span>
+          <span class="pc-currency"></span>
+          <span class="pc-price">Consultar</span>
         </div>
-        <div class="pc-period">por mes, facturado anualmente</div>
-        <div class="pc-annual-note visible" id="note-elite">$1,200/año, ahorras $240</div>
+        <div class="pc-period">cotización personalizada</div>
         <div class="pc-setup">
           <div class="setup-dot"></div>
-          Setup $197
-          <div class="setup-tooltip">Setup completo con estrategia dedicada<br>e integración de todas las herramientas</div>
+          Setup a la medida
+          <div class="setup-tooltip">Cotizado según número de sucursales<br>y volumen de tu operación</div>
         </div>
       </div>
       <div class="pc-divider"></div>
@@ -2491,7 +2490,7 @@ setInterval(cycleWord, 2200);
         </div>
       </div>
       <div class="pc-cta-wrap">
-        <a href="https://calendar.app.google/8RZpzLjaAQgjki5HA" target="_blank" class="btn-plan">Empezar →</a>
+        <a href="https://wa.me/50370247995?text=Hola%2C%20quiero%20cotizar%20el%20plan%20Enterprise%20de%20Vuelvo" target="_blank" class="btn-plan">Consultar por WhatsApp →</a>
       </div>
     </div>
 
@@ -2502,8 +2501,8 @@ setInterval(cycleWord, 2200);
 <script>
 (function(){
   var btabs = document.querySelectorAll('#precios .seg-btn');
-  var prices = document.querySelectorAll('.pc-price');
-  var notes = ['note-emp','note-pro','note-elite'];
+  var prices = document.querySelectorAll('.pc-price[data-monthly]');
+  var notes = ['note-emp','note-pro'];
 
   btabs.forEach(function(t){
     t.addEventListener('click', function(){
@@ -2517,7 +2516,7 @@ setInterval(cycleWord, 2200);
         var el = document.getElementById(id);
         if(el) el.classList.toggle('visible', isAnnual);
       });
-      document.querySelectorAll('.pc-period').forEach(function(p){
+      document.querySelectorAll('.prcard:not(.enterprise) .pc-period').forEach(function(p){
         p.textContent = isAnnual ? 'por mes, facturado anualmente' : 'por mes';
       });
     });
